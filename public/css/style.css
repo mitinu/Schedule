@@ -1,0 +1,53 @@
+body{
+    background-color: rgb(38, 39, 66);
+}
+.course{
+    margin: 10px 1%;
+    background-color: white;
+    width:auto;
+}
+.sort{
+    margin: 10px 1%;
+    background-color: white;
+
+}
+.roll{
+    height: 50px;
+    width: 50px;
+}
+.content{
+    background-color: rgb(197, 196, 196);
+    width:auto;
+    overflow-x: auto;
+}
+.roll_professor{
+    width: 100px;
+}
+td{
+    border: solid black 1px;
+}
+.display-flex{
+    display: flex;
+}
+.carts_professor_sort{
+    border: solid black 0.5px;
+}
+.offices{
+    width: 50px;
+    height: 40px;
+}
+td{
+    height: 20px;
+}
+.parameters .para td{
+    height: 20px;
+}
+.parameters td{
+    height: 48px;
+}
+.days_professor{
+    width: 430px;
+}
+.days_professor span{
+    margin-bottom: 10px;
+}
