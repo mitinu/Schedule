@@ -1,6 +1,13 @@
 class Office {
     id = ""
-    day = [true, true, true, true, true, true]
+    days_parrys = [
+        [true, true, true, true, true, true],
+        [true, true, true, true, true, true],
+        [true, true, true, true, true, true],
+        [true, true, true, true, true, true],
+        [true, true, true, true, true, true],
+        [true, true, true, true, true, true]
+    ]
     constructor(name) {
         this.id = name
     }

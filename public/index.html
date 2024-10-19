@@ -161,18 +161,21 @@
         </div>
     </div>
     <input type="button" value="обновлениен данных(cбрасывает сохронение)" onclick="uploading_data()">
-    <input type="button" value="временое сохронение расписание" onclick="save_data()">
-    <input type="button" value="сброс сохронение" onclick="func_remove_data(this)">
-    <input type="button" value="завершить растовление расписание" onclick="complete_data()">
-    <input type="button" value="перейти в просмотерстарого расписание" onclick="redirectionChekDate()">
+    <input type="button" id="save_data" value="временое сохронение расписание" onclick="save_data()">
+    <input type="button" id="save_config" value="временое сохронение конфигов" onclick="save_config()">
+    <input type="button" value="сброс сохронение расписания" onclick="func_remove_data(this)">
+    <input type="button" value="сброс сохронение конфигов" onclick="func_remove_config()">
+    <input type="button" id="complete_data" value="завершить растовление расписание" onclick="complete_data()">
+    <input type="button" value="получить расписание" onclick="getDate()">
+    <input type="button" value="Обновить страничку(неработает так как надо)" onclick="updating_page()">
+    <input type="date" id="date" onblur="resetDate(this)"><font color="white">выбирите пн</font>
     <div class="sort">
-        <input type="button" value="-" class="roll" onclick="rollFunc2(this)"> сортировка
+        <input type="button" value="-" class="roll" onclick="rollFunc(this)"> сортировка
         <div class="content">
             <div class="office_sort display-flex"></div>
             <div class="professor_sort display-flex"></div>
         </div>
     </div>
-    <input type="date" onblur="resetData(this)">
     <div class="course">
         <input type="button" value="-" class="roll" onclick="rollFunc(this)"> 1 курсы
 
@@ -990,6 +993,104 @@
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
     <script>
+        function getDate(){
+            func_remove_data(this)
+            const urlGetDate = new URL(location.href + "getDate/"+document.getElementById("date").value)
+            try {
+                fetch(urlGetDate.href).then(function(res){return res.json()})
+                .then(function(data){
+                    for (let i_group = 0; i_group < data.arrCourseGroups.length; i_group++) {
+                        days = document.getElementsByClassName("days_course"+(i_group+1))
+                        for (let i = 0; i < days.length; i++) {
+                            document.getElementsByClassName("content_grups_course"+(i_group+1))[i].innerHTML = ""
+                            htmlCode = `                
+                                <table>
+                                    <tr>
+                                        <td colspan="2" class="name_groups_course${(i_group+1)}_day${i}"></td>
+                                    </tr>
+                                    <tr>
+                                        <td><input list="subjects_day${(i+1)}_couple1" class="subjects subjects_day${(i+1)}_couple1" oninput="checkRepetitions(this)"></td>
+                                        <td rowspan="2"><input list="offices_day${(i+1)}_couple1" class="offices offices_day${(i+1)}_couple1" oninput="checkRepetitions(this)"></td>
+                                    </tr>
+                                    <tr>
+                                        <td><input list="professors_day${(i+1)}_couple1" class="professors professors_day${(i+1)}_couple1" oninput="checkRepetitions(this)"></td>
+                                    </tr>
+                                    <tr>
+                                        <td><input list="subjects_day${(i+1)}_couple2" class="subjects subjects_day${(i+1)}_couple2" oninput="checkRepetitions(this)"></td>
+                                        <td rowspan="2"><input list="offices_day${(i+1)}_couple2" class="offices offices_day${(i+1)}_couple2" oninput="checkRepetitions(this)"></td>
+                                    </tr>
+                                    <tr>
+                                        <td><input list="professors_day${(i+1)}_couple2" class="professors professors_day${(i+1)}_couple2" oninput="checkRepetitions(this)"></td>
+                                    </tr>
+                                    <tr>
+                                        <td><input list="subjects_day${(i+1)}_couple3" class="subjects subjects_day${(i+1)}_couple3" oninput="checkRepetitions(this)"></td>
+                                        <td rowspan="2"><input list="offices_day${(i+1)}_couple3" class="offices offices_day${(i+1)}_couple3" oninput="checkRepetitions(this)"></td>
+                                    </tr>
+                                    <tr>
+                                        <td><input list="professors_day${(i+1)}_couple3" class="professors professors_day${(i+1)}_couple3" oninput="checkRepetitions(this)"></td>
+                                    </tr>
+                                    <tr>
+                                        <td><input list="subjects_day${(i+1)}_couple4" class="subjects subjects_day${(i+1)}_couple4" oninput="checkRepetitions(this)"></td>
+                                        <td rowspan="2"><input list="offices_day${(i+1)}_couple4" class="offices offices_day${(i+1)}_couple4" oninput="checkRepetitions(this)"></td>
+                                    </tr>
+                                    <tr>
+                                        <td><input list="professors_day${(i+1)}_couple4" class="professors professors_day${(i+1)}_couple4" oninput="checkRepetitions(this)"></td>
+                                    </tr>
+                                    <tr>
+                                        <td><input list="subjects_day${(i+1)}_couple5" class="subjects subjects_day${(i+1)}_couple5" oninput="checkRepetitions(this)"></td>
+                                        <td rowspan="2"><input list="offices_day${(i+1)}_couple5" class="offices offices_day${(i+1)}_couple5" oninput="checkRepetitions(this)"></td>
+                                    </tr>
+                                    <tr>
+                                        <td><input list="professors_day${(i+1)}_couple5" class="professors professors_day${(i+1)}_couple5" oninput="checkRepetitions(this)"></td>
+                                    </tr>
+                                    <tr>
+                                        <td><input list="subjects_day${(i+1)}_couple6" class="subjects subjects_day${(i+1)}_couple6" oninput="checkRepetitions(this)"></td>
+                                        <td rowspan="2"><input list="offices_day${(i+1)}_couple6" class="offices offices_day${(i+1)}_couple6" oninput="checkRepetitions(this)"></td>
+                                    </tr>
+                                    <tr>
+                                        <td><input list="professors_day${(i+1)}_couple6" class="professors professors_day${(i+1)}_couple6" oninput="checkRepetitions(this)"></td>
+                                    </tr>
+                                </table>
+                            `
+                            for (let j = 0; j < data.arrCourseGroups[i_group].length; j++) {
+                                document.getElementsByClassName("content_grups_course"+(i_group+1))[i].innerHTML += htmlCode
+                                document.getElementsByClassName("name_groups_course"+(i_group+1)+"_day"+i)[j].innerHTML = data.arrCourseGroups[i_group][j].name
+                            } 
+                        }
+                    }
+                    for (let i = 0; i < data.data.length; i++) {
+                        document.getElementsByClassName("professors")[i].value = data.data[i].professors
+                        document.getElementsByClassName("subjects")[i].value = data.data[i].subjects
+                        document.getElementsByClassName("offices")[i].value = data.data[i].offices
+                    }
+                })
+                    
+            } 
+            catch (e) {
+                alert("нет данных на этот день")
+            }
+            // disabled
+            // setAttribute
+            document.getElementById("complete_data").disabled = true   
+            document.getElementById("save_config").disabled = true   
+            document.getElementById("save_data").disabled = true   
+        }
+        
+
+        function updating_page(){
+            func_remove_data(this)
+            addGrup()
+            document.getElementById("complete_data").disabled = false   
+            document.getElementById("save_config").disabled = false   
+            document.getElementById("save_data").disabled = false   
+        }
+        
+        
+        
+        
+        
+        
+        
         startIndex()
         function startIndex() {
             arrCourseGroups = JSON.parse(localStorage.getItem("arrCourseGroups"))
@@ -998,13 +1099,13 @@
             arrSubject = JSON.parse(localStorage.getItem("arrSubject"))
             arrProfessor = JSON.parse(localStorage.getItem("arrProfessor"))
             finallArrProfessor = JSON.parse(localStorage.getItem("finallArrProfessor"))
+            arrHours = JSON.parse(localStorage.getItem("arrHours"))
             date = JSON.parse(localStorage.getItem("date"))
             saveDataSubjects = JSON.parse(localStorage.getItem("saveDataSubjects"))
             saveDataOffices = JSON.parse(localStorage.getItem("saveDataOffices"))
             saveDataProfessors = JSON.parse(localStorage.getItem("saveDataProfessors"))
             if (date != null) {
-                console.log("dadwa")
-                resetData(date)
+                resetDate(date)
             }
             if (arrCourseGroups != null) {
                 addGrup()
@@ -1093,53 +1194,101 @@
         function addOfficeSort(){
             htmlCode = `
                 <div class="carts_office_sort">
-                    <span class="addres_office"></span><input type="button" value="-" class="office_swit" onclick="office_day_swit(this)">
-                    <div class="cart_office_days_sort"></div> 
+                    <div class='roll_office'>
+                        <span class="addres_office"></span>
+                        <input type="button" value="-" class="office_swit" onclick="office_day_swit(this)">
+                    </div>
+                    <div class="cart_office_days_sort">
+                        <div class="day_office1"></div>
+                        <div class="day_office2"></div>
+                        <div class="day_office3"></div>
+                        <div class="day_office4"></div>
+                        <div class="day_office5"></div>
+                        <div class="day_office6"></div>
+                    </div> 
                 </div>
-            `//TODO office_swit(this)
+            `
             for (let i = 0; i < arrOffice.length; i++) {
                 document.getElementsByClassName("office_sort")[0].innerHTML += htmlCode
-                htmlCode2 = `
-                    <div><span>пн</span><input type="button" value="-" class="office_swit_${i}" onclick="office_swit(this)"></div>
-                    <div><span>вт</span><input type="button" value="-" class="office_swit_${i}" onclick="office_swit(this)"></div>
-                    <div><span>ср</span><input type="button" value="-" class="office_swit_${i}" onclick="office_swit(this)"></div>
-                    <div><span>чт</span><input type="button" value="-" class="office_swit_${i}" onclick="office_swit(this)"></div>
-                    <div><span>пт</span><input type="button" value="-" class="office_swit_${i}" onclick="office_swit(this)"></div>
-                    <div><span>сб</span><input type="button" value="-" class="office_swit_${i}" onclick="office_swit(this)"></div>
-                `
-                document.getElementsByClassName("cart_office_days_sort")[i].innerHTML = htmlCode2
-
                 document.getElementsByClassName("addres_office")[i].innerHTML = arrOffice[i].id
-                
-            }
-            if (arrOffice.length != finallArrOffice.length) {
-                for (let i = 0; i < arrOffice.length; i++) {
-                    if (finallArrOffice.findIndex(name => name.id == arrOffice[i].id) == -1) {
-                        document.getElementsByClassName("office_swit")[i].value = "+"
+                for (let ind = 0; ind < arrOffice[i].days_parrys.length; ind++) {
+                    let day = ""
+                    switch(ind){
+                        case 0:
+                            day = "пн"
+                            break
+                        case 1:
+                            day = "вт"
+                            break
+                        case 2:
+                            day = "ср"
+                            break
+                        case 3:
+                            day = "чт"
+                            break
+                        case 4:
+                            day = "пт"
+                            break
+                        case 5:
+                            day = "сб"
+                            break
+                    }
+                    htmlCode2 = `
+                        <span>${day}</span>
+                        <div class="profesor_stule">
+                            <span>пара 1</span>
+                            <input type="button" value="-" class="swit_office_day_${ind}_parry_${i}" onclick="office_day_parry_swit(this)">
+                        </div>
+                        <div class="profesor_stule">
+                            <span>пара 2</span>
+                            <input type="button" value="-" class="swit_office_day_${ind}_parry_${i}" onclick="office_day_parry_swit(this)">
+                        </div>
+                        <div class="profesor_stule">
+                            <span>пара 3</span>
+                            <input type="button" value="-" class="swit_office_day_${ind}_parry_${i}" onclick="office_day_parry_swit(this)">
+                        </div>
+                        <div class="profesor_stule">
+                            <span>пара 4</span>
+                            <input type="button" value="-" class="swit_office_day_${ind}_parry_${i}" onclick="office_day_parry_swit(this)">
+                        </div>
+                        <div class="profesor_stule">
+                            <span>пара 5</span>
+                            <input type="button" value="-" class="swit_office_day_${ind}_parry_${i}" onclick="office_day_parry_swit(this)">
+                        </div>
+                        <div class="profesor_stule">
+                            <span>пара 6</span>
+                            <input type="button" value="-" class="swit_office_day_${ind}_parry_${i}" onclick="office_day_parry_swit(this)">
+                        </div>
+                    `
+                    document.getElementsByClassName("day_office"+(ind+1))[i].innerHTML += htmlCode2
+                    for (let j = 0; j < arrOffice[i].days_parrys[ind].length; j++) {
+                        if (!arrOffice[i].days_parrys[ind][j]) {
+                            document.getElementsByClassName("swit_office_day_"+ind+"_parry_"+i)[j].value = "+"
+                        }
                     }
                 }
             }
             document.getElementsByClassName("office_sort")[0].innerHTML += '<input type="button" value="готово" onclick="addOffice()">'
             addOffice()
-        }
+            
+        }    
         function addOffice() {
             for (let ind = 1; ind < 7; ind++) {
                 for (let j = 1; j < 7; j++) {
                     document.getElementById("offices_day"+ind+"_couple"+j).innerHTML = ""            
                 }
             }
-            for (let i = 0; i < finallArrOffice.length; i++) {
-                
-                for (let ind = 0; ind < finallArrOffice[i].day.length; ind++) {
-                    if(finallArrOffice[i].day[ind]){
-                        for (let j = 1; j < 7; j++) {
-                            document.getElementById("offices_day"+(ind+1)+"_couple"+j).innerHTML += '<option value="'+finallArrOffice[i].id+'">'
-                        }        
+            for (let i = 0; i < arrOffice.length; i++) {
+                for (let ind = 0; ind < arrOffice[i].days_parrys.length; ind++) {
+                    for (let j = 0; j < arrOffice[i].days_parrys[ind].length; j++) {
+                        if(arrOffice[i].days_parrys[ind][j]){
+                            document.getElementById("offices_day"+(ind+1)+"_couple"+(j+1)).innerHTML += '<option value="'+arrOffice[i].id+'">'
+                        }
                     }
-                    
                 }
             }
         }
+    
    
         function addSubject() {
             for (let i = 0; i < arrSubject.length; i++) {
@@ -1159,12 +1308,12 @@
                         <input type="button" value="-" class="professor_swit" onclick="professor_swit(this)">
                     </div>
                     <div class="days_professor display-flex">
-                        <div class="parry_professor1"></div>
-                        <div class="parry_professor2"></div>
-                        <div class="parry_professor3"></div>
-                        <div class="parry_professor4"></div>
-                        <div class="parry_professor5"></div>
-                        <div class="parry_professor6"></div>
+                        <div class="day_professor1"></div>
+                        <div class="day_professor2"></div>
+                        <div class="day_professor3"></div>
+                        <div class="day_professor4"></div>
+                        <div class="day_professor5"></div>
+                        <div class="day_professor6"></div>
                     </div>
                 </div>
             `
@@ -1195,32 +1344,32 @@
                     }
                     htmlCode2 = `
                         <span>${day}</span>
-                        <div>
+                        <div class="profesor_stule">
                             <span>пара 1</span>
                             <input type="button" value="-" class="swit_professor_day_${ind}_parry_${i}" onclick="professor_day_parry_swit(this)">
-                            </div>
-                        <div>
+                        </div>
+                        <div class="profesor_stule">
                             <span>пара 2</span>
                             <input type="button" value="-" class="swit_professor_day_${ind}_parry_${i}" onclick="professor_day_parry_swit(this)">
                         </div>
-                        <div>
+                        <div class="profesor_stule">
                             <span>пара 3</span>
                             <input type="button" value="-" class="swit_professor_day_${ind}_parry_${i}" onclick="professor_day_parry_swit(this)">
                         </div>
-                        <div>
+                        <div class="profesor_stule">
                             <span>пара 4</span>
                             <input type="button" value="-" class="swit_professor_day_${ind}_parry_${i}" onclick="professor_day_parry_swit(this)">
                         </div>
-                        <div>
+                        <div class="profesor_stule">
                             <span>пара 5</span>
                             <input type="button" value="-" class="swit_professor_day_${ind}_parry_${i}" onclick="professor_day_parry_swit(this)">
                         </div>
-                        <div>
+                        <div class="profesor_stule">
                             <span>пара 6</span>
                             <input type="button" value="-" class="swit_professor_day_${ind}_parry_${i}" onclick="professor_day_parry_swit(this)">
                         </div>
                     `
-                    document.getElementsByClassName(("parry_professor"+(ind+1)))[i].innerHTML += htmlCode2
+                    document.getElementsByClassName(("day_professor"+(ind+1)))[i].innerHTML += htmlCode2
                     for (let j = 0; j < finallArrProfessor[i].days_parrys[ind].length; j++) {
                         if (!finallArrProfessor[i].days_parrys[ind][j]) {
                             document.getElementsByClassName("swit_professor_day_"+ind+"_parry_"+i)[j].value = "+"
@@ -1240,12 +1389,10 @@
             }
 
             for (let i = 0; i < finallArrProfessor.length; i++) {
-
                 for (let ind = 0; ind < finallArrProfessor[i].days_parrys.length; ind++) {
                     for (let j = 0; j < finallArrProfessor[i].days_parrys[ind].length; j++) {
                         if (finallArrProfessor[i].days_parrys[ind][j]) {
-                            str = "professors_day"+(ind+1)+"_couple"+(j+1)
-                            document.getElementById(str).innerHTML += '<option value="'+finallArrProfessor[i].name+'">'             
+                            document.getElementById("professors_day"+(ind+1)+"_couple"+(j+1)).innerHTML += '<option value="'+finallArrProfessor[i].name+'">'             
                         }
                     }
                 }
@@ -1254,7 +1401,7 @@
 
 
 
-        function resetData(data){
+        function resetDate(data){
             if (data.value == null) {
                 datee = new Date(data)
             }
@@ -1284,11 +1431,6 @@
 
 
         function save_data(){
-            localStorage.setItem("finallArrOffice", JSON.stringify(finallArrOffice))
-            localStorage.setItem("finallArrProfessor", JSON.stringify(finallArrProfessor))
-            if (date != null) {
-                localStorage.setItem("date", JSON.stringify(date))
-            }
             saveDataSubjects = new Array();
             for (let i = 0; i < document.getElementsByClassName("subjects").length; i++) {
                 saveDataSubjects[i] = document.getElementsByClassName("subjects")[i].value
@@ -1307,7 +1449,15 @@
             }
             localStorage.setItem("saveDataProfessors", JSON.stringify(saveDataProfessors))
         }
-        
+        function save_config(){
+            localStorage.setItem("finallArrOffice", JSON.stringify(finallArrOffice))
+            localStorage.setItem("finallArrProfessor", JSON.stringify(finallArrProfessor))
+            if (date != null) {
+                localStorage.setItem("date", JSON.stringify(date))
+            }
+            
+
+        }
         
         async function uploading_data(){
             
@@ -1319,6 +1469,7 @@
                     arrOffice = data.arrOffice
                     arrSubject = data.arrSubject
                     arrProfessor = data.arrProfessor
+                    arrHours = data.arrListHours
                 })
                 localStorage.setItem("arrCourseGroups", JSON.stringify(arrCourseGroups))
                 
@@ -1329,7 +1480,11 @@
 
                 localStorage.setItem("arrProfessor", JSON.stringify(arrProfessor))
                 localStorage.setItem("finallArrProfessor", JSON.stringify(arrProfessor.slice()))
-            
+
+                localStorage.setItem("arrHours", JSON.stringify(arrHours))
+
+                
+                func_remove_config()
                 func_remove_data(this)
 
             } else {
@@ -1338,6 +1493,74 @@
             
         }
         
+
+        function func_remove_config(){
+            if (confirm("Вы уверены, что хотите продолжить?")) {
+                localStorage.setItem("finallArrOffice", JSON.stringify(arrOffice))
+                localStorage.setItem("finallArrProfessor", JSON.stringify(arrProfessor))
+                localStorage.removeItem("date")
+                document.getElementsByClassName("office_sort")[0].innerHTML = ""
+                document.getElementsByClassName("professor_sort")[0].innerHTML = ""
+                let html = `
+                    <div class="datalist_subjects_day1">
+                        <datalist id="subjects_day1_couple1"></datalist>   
+                        <datalist id="subjects_day1_couple2"></datalist>   
+                        <datalist id="subjects_day1_couple3"></datalist>   
+                        <datalist id="subjects_day1_couple4"></datalist>   
+                        <datalist id="subjects_day1_couple5"></datalist>   
+                        <datalist id="subjects_day1_couple6"></datalist>   
+                    </div>
+                    <div class="datalist_subjects_day2">
+                        <datalist id="subjects_day2_couple1"></datalist>   
+                        <datalist id="subjects_day2_couple2"></datalist>   
+                        <datalist id="subjects_day2_couple3"></datalist>   
+                        <datalist id="subjects_day2_couple4"></datalist>   
+                        <datalist id="subjects_day2_couple5"></datalist>   
+                        <datalist id="subjects_day2_couple6"></datalist>   
+                    </div>
+                    <div class="datalist_subjects_day3">
+                        <datalist id="subjects_day3_couple1"></datalist>   
+                        <datalist id="subjects_day3_couple2"></datalist>   
+                        <datalist id="subjects_day3_couple3"></datalist>   
+                        <datalist id="subjects_day3_couple4"></datalist>   
+                        <datalist id="subjects_day3_couple5"></datalist>   
+                        <datalist id="subjects_day3_couple6"></datalist>   
+                    </div>
+                    <div class="datalist_subjects_day4">
+                        <datalist id="subjects_day4_couple1"></datalist>   
+                        <datalist id="subjects_day4_couple2"></datalist>   
+                        <datalist id="subjects_day4_couple3"></datalist>   
+                        <datalist id="subjects_day4_couple4"></datalist>   
+                        <datalist id="subjects_day4_couple5"></datalist>   
+                        <datalist id="subjects_day4_couple6"></datalist>   
+                    </div>
+                    <div class="datalist_subjects_day5">
+                        <datalist id="subjects_day5_couple1"></datalist>   
+                        <datalist id="subjects_day5_couple2"></datalist>   
+                        <datalist id="subjects_day5_couple3"></datalist>   
+                        <datalist id="subjects_day5_couple4"></datalist>   
+                        <datalist id="subjects_day5_couple5"></datalist>   
+                        <datalist id="subjects_day5_couple6"></datalist>   
+                    </div>
+                    <div class="datalist_subjects_day6">
+                        <datalist id="subjects_day6_couple1"></datalist>   
+                        <datalist id="subjects_day6_couple2"></datalist>   
+                        <datalist id="subjects_day6_couple3"></datalist>   
+                        <datalist id="subjects_day6_couple4"></datalist>   
+                        <datalist id="subjects_day6_couple5"></datalist>   
+                        <datalist id="subjects_day6_couple6"></datalist>   
+                    </div>
+                `
+                document.getElementsByClassName("datalist_subjects")[0].innerHTML = html
+                addOfficeSort()
+                addSubject()
+                addProfessorSort()
+            } else {
+                alert("Действие отменено.");
+            }
+           
+
+        }
         function func_remove_data(checkObj){
             if(checkObj.type != null){
                 if (confirm("Вы уверены, что хотите продолжить?")) {
@@ -1349,76 +1572,20 @@
             else{
                 remove_data_items()
             }
-            
-
+            addGrup()
         }
         function remove_data_items(){
-            localStorage.setItem("finallArrOffice", JSON.stringify(arrOffice))
-            localStorage.setItem("finallArrProfessor", JSON.stringify(arrProfessor))
-            localStorage.removeItem("date")
+
             localStorage.removeItem("saveDataSubjects")
             localStorage.removeItem("saveDataOffices")
             localStorage.removeItem("saveDataProfessors")
             for (let i = 1; i <= 4; i++) {
                 for (let j = 0; j < 6; j++) {
                     document.getElementsByClassName("content_grups_course"+(i))[j].innerHTML = ""
+                    //TODO починить работу с сайтом без обновление странички
                 }                
             }
-            document.getElementsByClassName("office_sort")[0].innerHTML = ""
-            document.getElementsByClassName("professor_sort")[0].innerHTML = ""
-            let html = `
-                <div class="datalist_subjects_day1">
-                    <datalist id="subjects_day1_couple1"></datalist>   
-                    <datalist id="subjects_day1_couple2"></datalist>   
-                    <datalist id="subjects_day1_couple3"></datalist>   
-                    <datalist id="subjects_day1_couple4"></datalist>   
-                    <datalist id="subjects_day1_couple5"></datalist>   
-                    <datalist id="subjects_day1_couple6"></datalist>   
-                </div>
-                <div class="datalist_subjects_day2">
-                    <datalist id="subjects_day2_couple1"></datalist>   
-                    <datalist id="subjects_day2_couple2"></datalist>   
-                    <datalist id="subjects_day2_couple3"></datalist>   
-                    <datalist id="subjects_day2_couple4"></datalist>   
-                    <datalist id="subjects_day2_couple5"></datalist>   
-                    <datalist id="subjects_day2_couple6"></datalist>   
-                </div>
-                <div class="datalist_subjects_day3">
-                    <datalist id="subjects_day3_couple1"></datalist>   
-                    <datalist id="subjects_day3_couple2"></datalist>   
-                    <datalist id="subjects_day3_couple3"></datalist>   
-                    <datalist id="subjects_day3_couple4"></datalist>   
-                    <datalist id="subjects_day3_couple5"></datalist>   
-                    <datalist id="subjects_day3_couple6"></datalist>   
-                </div>
-                <div class="datalist_subjects_day4">
-                    <datalist id="subjects_day4_couple1"></datalist>   
-                    <datalist id="subjects_day4_couple2"></datalist>   
-                    <datalist id="subjects_day4_couple3"></datalist>   
-                    <datalist id="subjects_day4_couple4"></datalist>   
-                    <datalist id="subjects_day4_couple5"></datalist>   
-                    <datalist id="subjects_day4_couple6"></datalist>   
-                </div>
-                <div class="datalist_subjects_day5">
-                    <datalist id="subjects_day5_couple1"></datalist>   
-                    <datalist id="subjects_day5_couple2"></datalist>   
-                    <datalist id="subjects_day5_couple3"></datalist>   
-                    <datalist id="subjects_day5_couple4"></datalist>   
-                    <datalist id="subjects_day5_couple5"></datalist>   
-                    <datalist id="subjects_day5_couple6"></datalist>   
-                </div>
-                <div class="datalist_subjects_day6">
-                    <datalist id="subjects_day6_couple1"></datalist>   
-                    <datalist id="subjects_day6_couple2"></datalist>   
-                    <datalist id="subjects_day6_couple3"></datalist>   
-                    <datalist id="subjects_day6_couple4"></datalist>   
-                    <datalist id="subjects_day6_couple5"></datalist>   
-                    <datalist id="subjects_day6_couple6"></datalist>   
-                </div>
-            `
-            document.getElementsByClassName("datalist_subjects")[0].innerHTML = html
-            startIndex() 
-        }
+        }   
        
 
         function redirectionChekDate(){
@@ -1486,52 +1653,80 @@
             for (let i_curs = 0; i_curs < arrCourseGroups.length; i_curs++) {
                 for (let i_day = 1; i_day < 7; i_day++) {
                     let rowData = []
+                    rowData.push("")
+                    rowData.push("")
+                    rowData.push("")
                     for (let i = 0; i < arrCourseGroups[i_curs].length; i++) {
                         rowData.push(arrCourseGroups[i_curs][i].name)
                         rowData.push("")
                     }
                     data[i_curs].push(rowData)
+                    let day = ""
+                        switch(i_day){
+                            case 1:
+                                day = "пн"
+                                break
+                            case 2:
+                                day = "вт"
+                                break
+                            case 3:
+                                day = "ср"
+                                break
+                            case 4:
+                                day = "чт"
+                                break
+                            case 5:
+                                day = "пт"
+                                break
+                            case 6:
+                                day = "сб"
+                                break
+                        }
+                    dateCourse = new Date(date)
+                    
+                    let dateText = dateCourse.getDate()+"."+(dateCourse.getMonth()+1)+"."+dateCourse.getFullYear()
+                    dateCourse.setDate(dateCourse.getDate()+1)
                     for (let i_couple = 1; i_couple < 7; i_couple++) {
+                        
                         rowData = [];
+                        if (i_couple==1) {
+                            rowData.push(dateText)
+                            rowData.push(day)
+                        }
+                        else{
+                            rowData.push("")
+                            rowData.push("")
+                        }
+                        rowData.push(i_couple)
+                        
+
+                        
+                        let rowdata2 = rowData.slice()
+                       
                         for (let i_grup = 0; i_grup < arrCourseGroups[i_curs].length; i_grup++) {
                             cellText = document.getElementsByClassName("subjects_day"+i_day+"_couple"+i_couple)[index_group+i_grup].value
-                            rowData.push(cellText)
+                            rowdata2.push(cellText)
                             cellText = document.getElementsByClassName("offices_day"+i_day+"_couple"+i_couple)[index_group+i_grup].value
-                            rowData.push(cellText)
+                            rowdata2.push(cellText)
                         }
-                        data[i_curs].push(rowData)
-                        rowData = []
+                        data[i_curs].push(rowdata2)
+                        rowdata2 = rowData.slice()
                         for (let i_grup = 0; i_grup < arrCourseGroups[i_curs].length; i_grup++) {
                             cellText = document.getElementsByClassName("professors_day"+i_day+"_couple"+i_couple)[index_group+i_grup].value
-                            rowData.push(cellText)
-                            rowData.push("")
+                            rowdata2.push(cellText)
+                            rowdata2.push("")
                         }   
-                        data[i_curs].push(rowData)
+                        data[i_curs].push(rowdata2)
                         for (let i_grup = 0; i_grup < arrCourseGroups[i_curs].length; i_grup++) {
-                            subject = document.getElementsByClassName("subjects_day"+i_day+"_couple"+i_couple)[index_group+i_grup].value
-                            subject_index = arrSubject.findIndex(element => element.name == subject)
-                            professor = document.getElementsByClassName("professors_day"+i_day+"_couple"+i_couple)[index_group+i_grup].value
-                            professor_index = finallArrProfessor.findIndex(element => element.name == professor)
-                            if (professor_index!=-1&&subject_index!=-1) {
-                                for (let arrProffessor_indSubject = 0; arrProffessor_indSubject < finallArrProfessor[professor_index].subject.length; arrProffessor_indSubject++) {
-                                    if (finallArrProfessor[professor_index].subject[arrProffessor_indSubject].id == arrSubject[subject_index].ID) {
-                                        finallArrProfessor[professor_index].subject[arrProffessor_indSubject].count++
-                                    }
-                                }
-                            }
-                            if (subject_index!=-1) {
-                                for (let arrGroups_indSubject = 0; arrGroups_indSubject < arrCourseGroups[i_curs][i_grup].subject.length; arrGroups_indSubject++) {
-                                    if (arrCourseGroups[i_curs][i_grup].subject[arrGroups_indSubject].id == arrSubject[subject_index].ID) {
-                                        arrCourseGroups[i_curs][i_grup].subject[arrGroups_indSubject].count++
-                                    }
-                                }
-                            }
-
+                            let text_subject = document.getElementsByClassName("subjects_day"+i_day+"_couple"+i_couple)[index_group+i_grup].value
+                            let text_professor = document.getElementsByClassName("professors_day"+i_day+"_couple"+i_couple)[index_group+i_grup].value
+                            let text_group = arrCourseGroups[i_curs][i_grup].name
+                            checkHours(text_professor, text_group, text_subject)
                         }   
                     }
                 }
-                    
-                index_group += arrCourseGroups.length-1;
+                    // console.log(arrCourseGroups.slice())
+                index_group += arrCourseGroups[i_curs].length;
             }
 
             let workbook = XLSX.utils.book_new();
@@ -1541,14 +1736,16 @@
                 let swit = true
                 for (let i = 0; i < 78; i++) {//78 колчичество все строчик за неделю у одной курсса
                     if(i%13==0){
-                        for (let j = 0; j < arrCourseGroups[ind].length*2; j++) {
-                            worksheet['!merges'].push({ s: { r: i, c: j }, e: { r: i, c: ++j } })
+                        for (let j = 0; j < arrCourseGroups[ind].length*2; j+=2) {
+                            worksheet['!merges'].push({ s: { r: i, c: j+3 }, e: { r: i, c: j+4 } })
                         }
+                        worksheet['!merges'].push({ s: { r: i+1, c: 0 }, e: { r: i+12, c: 0 } })
+                        worksheet['!merges'].push({ s: { r: i+1, c: 1 }, e: { r: i+12, c: 1 } })
                     }
                     else{
                         if (swit) {
-                            for (let j = 0; j < data[ind][0].length*2; j+=2) {
-                                worksheet['!merges'].push({ s: { r: i, c: j+1 }, e: { r: (i+1), c: j+1 } })
+                            for (let j = 2; j < data[ind][0].length*2; j+=2) {
+                                worksheet['!merges'].push({ s: { r: i, c: j }, e: { r: (i+1), c: j } })
                                 swit = false
                             }
                         }
@@ -1557,100 +1754,101 @@
                         }
                         
                     }
+                    
                 }
                 XLSX.utils.book_append_sheet(workbook, worksheet, 'курс'+(ind+1));
             }
 
-            let arrIndSub = []
-            let arrColumsHead = [""]
-            for (let i_sub = 0; i_sub < arrSubject.length; i_sub++) {
-                arrIndSub.push(arrSubject[i_sub].ID)
-                arrColumsHead.push(arrSubject[i_sub].name)
-            }
-            let countRew = arrColumsHead.length
 
-            arrDataHoursProfessor = []
-            arrDataHoursProfessor.push(arrColumsHead)
-            arrDataHoursProfessor = sumHours(arrDataHoursProfessor, finallArrProfessor, countRew, arrIndSub)
-            let worksheetHP = XLSX.utils.aoa_to_sheet(arrDataHoursProfessor);
-            XLSX.utils.book_append_sheet(workbook, worksheetHP, 'предподователи');
-            
-            arrDataHoursGrup = []
-            arrDataHoursGrup.push(arrColumsHead)
-            for (let i = 0; i < arrCourseGroups.length; i++) {
-                arrDataHoursGrup = sumHours(arrDataHoursGrup, arrCourseGroups[i], countRew, arrIndSub)
+
+
+
+
+            arrDataHoursProfessor = [["Предподователь", "Группа", "Предмет", "всего чесов", "осталось"]]
+            for (let i = 0; i < arrHours.length; i++) {
+                arrDataHoursProfessor.push([getProfessor(arrHours[i].idProfessor), getGroup(arrHours[i].idGroup), getSubject(arrHours[i].idSubject), arrHours[i].countHours, arrHours[i].currentHours])
             }
-            let worksheetHG = XLSX.utils.aoa_to_sheet(arrDataHoursGrup);
-            XLSX.utils.book_append_sheet(workbook, worksheetHG, 'группы');
+
+            let worksheetHP = XLSX.utils.aoa_to_sheet(arrDataHoursProfessor);
+            XLSX.utils.book_append_sheet(workbook, worksheetHP, 'чесы');
+            
             
             
             XLSX.writeFile(workbook, 'table_data.xlsx');
         }
-        function sumHours(data, arrObject, countRew, arrIndSub){
-            for (let j = 0; j < arrObject.length; j++) {
-                let ind = 0
-                arrColums = [arrObject[j].name]
-                for (let i = 0; i < arrIndSub.length; i++) {
-                        if(arrObject[j].subject[ind].id == arrIndSub[i]){
-                        arrColums.push(arrObject[j].subject[ind].count)
-                    }
-                    else{
-                        if(arrObject[j].subject[ind].id > arrIndSub[i]){
-                            ind--
-                            arrColums.push("")
-                        }
-                        else{
-                            i--
-                        }
-                    }
-                    ind++
-                    if (ind >= arrObject[j].subject.length) {
-                        break                            
-                    }
-                }
-                if (arrColums.length < countRew) {
-                    for (let i = arrColums.length; i < countRew; i++) {
-                        arrColums.push("")
-                        
-                    }
-                }
-                data.push(arrColums)
-            }
-         return data
+        
+        function checkHours(professor, group, subject){
 
+            for (let i = 0; i < arrHours.length; i++) {
+                if (getProfessor(arrHours[i].idProfessor)==professor&&getGroup(arrHours[i].idGroup)==group&&getSubject(arrHours[i].idSubject)==subject) {
+                    console.log(professor)
+                    console.log(group)
+                    console.log(subject)
+                    console.log(arrHours[i])
+                    arrHours[i].currentHours-=2
+                }
+            }
+        }
+        function getProfessor(id){
+            for (let i = 0; i < arrProfessor.length; i++) {
+                if(arrProfessor[i].id == id){
+                    return arrProfessor[i].name
+                }
+            }
+        }
+        function getSubject(id){
+            for (let i = 0; i < arrSubject.length; i++) {
+                if(arrSubject[i].id == id){
+                    return arrSubject[i].name
+                }
+            }
+        }
+        function getGroup(id){
+            for (let i = 0; i < arrCourseGroups.length; i++) {
+                for (let j = 0; j < arrCourseGroups[i].length; j++) {
+                    if(arrCourseGroups[i][j].id == id){
+                    return arrCourseGroups[i][j].name
+                }
+                }
+                
+            }
         }
 
-
-
         function office_day_swit(thisButt){
+            console.log(document.getElementsByClassName("carts_office_sort")[Array.from(document.getElementsByClassName("office_swit")).findIndex(button => button == thisButt)])
+            office_swit_style = document.getElementsByClassName("carts_office_sort")[Array.from(document.getElementsByClassName("office_swit")).findIndex(button => button == thisButt)].style
+            
+            
             index_office = Array.from(document.getElementsByClassName("office_swit")).findIndex(button => button == thisButt)
             if(thisButt.value == "+"){
                 thisButt.value = "-"
-                document.getElementsByClassName("cart_office_days_sort")[index_office].style.display = "block"
-
+                document.getElementsByClassName("cart_office_days_sort")[index_office].style.display = "flex"
+                office_swit_style.width = "430px"
 
             }
             else{
                 thisButt.value = "+"
                 document.getElementsByClassName("cart_office_days_sort")[index_office].style.display = "none"
+                office_swit_style.width = "50px"
+
 
             }
         }
-        function office_swit(thisButt){
-            
-            index_office = thisButt.className.split("_")[2]
-            index_day = Array.from(document.getElementsByClassName("office_swit_"+index_office)).findIndex(button => button == thisButt)
-            if(thisButt.value == "-"){
-                finallArrOffice[index_office].day[index_day] = false
-                
-                thisButt.value = "+"
+        function office_day_parry_swit(thisButt){
+            index_proffesor = thisButt.className.split("_")[5]
+            index_day = thisButt.className.split("_")[3]
+            index_parray = Array.from(document.getElementsByClassName("swit_office_day_"+index_day+"_parry_"+index_proffesor)).findIndex(button => button == thisButt)
+            if(thisButt.value == "+"){
+                thisButt.value = "-"
+                finallArrOffice[index_proffesor].days_parrys[index_day][index_parray] = true
             }
             else{
-                finallArrOffice[index_office].day[index_day] = true
-                thisButt.value = "-"
+                thisButt.value = "+"
+                finallArrOffice[index_proffesor].days_parrys[index_day][index_parray] = false
             }
         }
        
+        
         
         function professor_day_parry_swit(thisButt){{}
             index_proffesor = thisButt.className.split("_")[5]
@@ -1671,13 +1869,13 @@
             professor_swit_style = document.getElementsByClassName("days_professor")[Array.from(document.getElementsByClassName("professor_swit")).findIndex(button => button == thisButt)].style
             if(thisButt.value == "+"){
                 professor_swit_style.display = "flex"
-                professor_swit_style.width = "410px"
+                professor_swit_style.width = "50px"
                 
                 thisButt.value = "-"
             }
             else{
                 professor_swit_style.display = "none"
-                professor_swit_style.width = "50px"
+                professor_swit_style.width = "430px"
 
                 thisButt.value = "+"
             }

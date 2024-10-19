@@ -1,11 +1,10 @@
 class Groups {
     name = ""
-    subject = []
-    constructor(name, arrSubjectId) {
+    static id_counter = 1
+    id = -1
+    constructor(name) {
+        this.id = Groups.id_counter++
         this.name = name
-        for (let i = 0; i < arrSubjectId.length; i++) {
-            this.subject.push({id: arrSubjectId[i], count: 0})
-        }
     }
 }
 module.exports = Groups;

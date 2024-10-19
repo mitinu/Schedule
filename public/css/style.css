@@ -21,7 +21,6 @@ body{
     overflow-x: auto;
 }
 .roll_professor{
-    width: 100px;
 }
 td{
     border: solid black 1px;
@@ -50,4 +49,24 @@ td{
 }
 .days_professor span{
     margin-bottom: 10px;
+}
+.office_stule{
+    width: 40px;
+    display: flex;
+    justify-content: space-between;
+}
+.profesor_stule{
+    width: 70px;
+    display: flex;
+    justify-content: space-between;
+}
+.carts_office_sort{
+    border: solid black 0.5px;
+
+}
+.cart_office_days_sort {
+    display: flex;
+    width: 430px;
+
+
 }

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        function removeItemTable(table, index){
+            for (let i = 0; i < table.rows.length; i++) {
+                table.rows[i].deleteCell(index)
+            }
+        }
+
+        fetch("http://localhost:3000/aaa/aaa").then(function(res){return res.text()}).then(function(data){
+            const parser = new DOMParser();
+            let table = parser.parseFromString("<tbody><table>"+parser.parseFromString(data, 'text/html').querySelectorAll('table')[0].querySelectorAll('tbody')[0].innerHTML+"</tbody></table>", 'text/html').querySelectorAll('table')[0]
+
+            console.log(table)
+
+            removeItemTable(table, 11)
+            removeItemTable(table, 10)
+            // removeItemTable(obj, 9)
+            removeItemTable(table, 8)
+            removeItemTable(table, 6)
+            removeItemTable(table, 5)
+            removeItemTable(table, 3)
+            removeItemTable(table, 2)
+            
+            
+            let arrSubject = []
+            let arrProfessors = []
+            let arrGroups = []
+            let idSubject = 0
+            let idGroup = 0
+            let idProfessor = 0
+            for (let i = 1; i < table.rows.length; i++) {
+                if(addSubject(arrSubject, table.rows[i], idSubject)){
+                    idSubject++
+                }
+                if(addGrup(arrGroups, table.rows[i], idGroup)){
+                    idGroup++
+                }
+                addProfessor(arrProfessors, table.rows[i], idProfessor, arrSubject, arrGroups)
+            }
+            
+            console.log(arrSubject)
+            console.log(arrGroups)
+            console.log(arrProfessors)
+                    
+                
+
+                
+
+      
+    
+
+            document.body.innerHTML += "<table>"+table.innerHTML+"</table>"
+            console.log(document.querySelector("table"))
+
+            
+
+        })
+        function addSubject(subjects, table_rows, id){
+            let swit = true
+            for (let j = 0; j < subjects.length; j++) {
+                if (subjects[j].name==table_rows.cells[2].textContent) {
+                    swit = false
+                    break
+                }
+            }
+            if (swit) {
+                subjects.push({"id":id, "name":table_rows.cells[2].textContent})
+            }
+            return swit
+        }
+        function addGrup(groups, table_rows, id){
+            let swit = true
+            for (let j = 0; j < groups.length; j++) {
+                if (groups[j].name==table_rows.cells[4].textContent) {
+                    swit = false
+                    break
+                }
+            }
+            if (swit) {
+                groups.push({"id":id, "name":table_rows.cells[4].textContent})
+            }
+            return swit
+        }
+        function addProfessor(professors, table_rows, id, arrSubject, arrGroups){
+            let swit = true
+            for (let j = 0; j < professors.length; j++) {
+                if (professors[j].name==table_rows.cells[1].textContent) {
+                    swit = false
+                    professors[j].subjects_groups_hours.push({"subject":getSubjectId(arrSubject, table_rows.cells[2].textContent), "group":getGruptId(arrGroups, table_rows.cells[4].textContent), "hours":table_rows.cells[3].textContent})
+                   
+                    break
+                }
+            }
+            if (swit) {
+                professors.push({"id":id, "name":table_rows.cells[1].textContent, "subjects_groups_hours":[{"subject":getSubjectId(arrSubject, table_rows.cells[2].textContent), "group":getGruptId(arrGroups, table_rows.cells[4].textContent), "hours":table_rows.cells[3].textContent}]})
+            }
+            return swit
+        }
+        function getSubjectId(arrSubject, name){
+            for (let  i = 0; i < arrSubject.length; i++) {
+                if (arrSubject[i].name == name) {
+                    return arrSubject[i].id
+                }                
+            }
+            return -1
+        }
+        function getGruptId(arrGroups, name){
+            for (let  i = 0; i < arrGroups.length; i++) {
+                if (arrGroups[i].name == name) {
+                    return arrGroups[i].id
+                }                
+            }
+            return -1
+        }
+    
+    </script>
+</body>
+</html>
