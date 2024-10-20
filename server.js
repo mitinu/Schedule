@@ -51,6 +51,7 @@ function addOffice(office, level, cauntr){
         }
     }
 }
+
 addOffice(1,2,8)
 addOffice(1,3,6)
 addOffice(1,5,13)
