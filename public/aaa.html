@@ -17,7 +17,6 @@
             const parser = new DOMParser();
             let table = parser.parseFromString("<tbody><table>"+parser.parseFromString(data, 'text/html').querySelectorAll('table')[0].querySelectorAll('tbody')[0].innerHTML+"</tbody></table>", 'text/html').querySelectorAll('table')[0]
 
-            console.log(table)
 
             removeItemTable(table, 11)
             removeItemTable(table, 10)
@@ -45,9 +44,6 @@
                 addProfessor(arrProfessors, table.rows[i], idProfessor, arrSubject, arrGroups)
             }
             
-            console.log(arrSubject)
-            console.log(arrGroups)
-            console.log(arrProfessors)
                     
                 
 
@@ -57,7 +53,6 @@
     
 
             document.body.innerHTML += "<table>"+table.innerHTML+"</table>"
-            console.log(document.querySelector("table"))
 
             
 

@@ -14,10 +14,12 @@ const ListHours = require('./classes/ListHours.js')
 
 server.use(express.static(__dirname + "/public"))
 
-server.get("/", function(req, res){ 
+server.get("/helloWord1337PIZZE", function(req, res){ 
     res.sendFile(__dirname + "/public/index.html") 
 })
-
+server.get("/", function(req, res){ 
+    res.sendFile(__dirname + "/public/redirectionChekDate.html") 
+})
 
 
 data = {
@@ -108,7 +110,6 @@ function addSubject(table_rows){
     if (swit) {
         data.arrSubject.push(new Subject(table_rows.cells[2].textContent))
     }
-    // return swit
 }
 function returnIdCours(str){
     switch(parseInt(str.split(" ")[1][1])){
