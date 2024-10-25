@@ -15,18 +15,11 @@ const ListHours = require('./classes/ListHours.js')
 server.use(express.static(__dirname + "/public"))
 
 server.get("/helloWord1337PIZZE", function(req, res){ 
-<<<<<<< HEAD
     res.sendFile(__dirname + "/public/notIndex.html") 
 })
 server.get("/", function(req, res){ 
-=======
->>>>>>> 8d874a9 (Version 2.3)
     res.sendFile(__dirname + "/public/index.html") 
 })
-server.get("/", function(req, res){ 
-    res.sendFile(__dirname + "/public/redirectionChekDate.html") 
-})
-
 data = {
     arrCourseGroups: [
         [     
