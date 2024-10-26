@@ -452,8 +452,7 @@ function save_config(){
 async function uploading_data(){
     
     if (confirm("Вы уверены, что хотите продолжить?")) {
-        
-        const urlGetData = new URL(location.href+"getData")
+        const urlGetData = new URL(location.origin+"/getData")
         await fetch(urlGetData.href).then(function(res){return res.json()}).then(function(data){
             basicData = data
             localStorage.setItem("basicData", JSON.stringify(basicData))
@@ -467,7 +466,7 @@ async function uploading_data(){
             
         })
         
-        func_remove_config()
+        func_remove_config(this)
         func_remove_data(this)
 
     } else {
@@ -477,75 +476,84 @@ async function uploading_data(){
 }
 
 
-function func_remove_config(){
-    if (confirm("Вы уверены, что хотите продолжить?")) {
-        //TDO вроде как не хватает удаление блоков
-        
-        localStorage.setItem("saveConfig", JSON.stringify({"finallArrOffice":basicData.arrOffice,"finallArrProfessor":basicData.arrProfessor}))
-
-        localStorage.removeItem("date")
-        document.getElementsByClassName("office_sort")[0].innerHTML = ""
-        document.getElementsByClassName("professor_sort")[0].innerHTML = ""
-        let html = `
-            <div class="datalist_subjects_day1">
-                <datalist id="subjects_day1_couple1"></datalist>   
-                <datalist id="subjects_day1_couple2"></datalist>   
-                <datalist id="subjects_day1_couple3"></datalist>   
-                <datalist id="subjects_day1_couple4"></datalist>   
-                <datalist id="subjects_day1_couple5"></datalist>   
-                <datalist id="subjects_day1_couple6"></datalist>   
-            </div>
-            <div class="datalist_subjects_day2">
-                <datalist id="subjects_day2_couple1"></datalist>   
-                <datalist id="subjects_day2_couple2"></datalist>   
-                <datalist id="subjects_day2_couple3"></datalist>   
-                <datalist id="subjects_day2_couple4"></datalist>   
-                <datalist id="subjects_day2_couple5"></datalist>   
-                <datalist id="subjects_day2_couple6"></datalist>   
-            </div>
-            <div class="datalist_subjects_day3">
-                <datalist id="subjects_day3_couple1"></datalist>   
-                <datalist id="subjects_day3_couple2"></datalist>   
-                <datalist id="subjects_day3_couple3"></datalist>   
-                <datalist id="subjects_day3_couple4"></datalist>   
-                <datalist id="subjects_day3_couple5"></datalist>   
-                <datalist id="subjects_day3_couple6"></datalist>   
-            </div>
-            <div class="datalist_subjects_day4">
-                <datalist id="subjects_day4_couple1"></datalist>   
-                <datalist id="subjects_day4_couple2"></datalist>   
-                <datalist id="subjects_day4_couple3"></datalist>   
-                <datalist id="subjects_day4_couple4"></datalist>   
-                <datalist id="subjects_day4_couple5"></datalist>   
-                <datalist id="subjects_day4_couple6"></datalist>   
-            </div>
-            <div class="datalist_subjects_day5">
-                <datalist id="subjects_day5_couple1"></datalist>   
-                <datalist id="subjects_day5_couple2"></datalist>   
-                <datalist id="subjects_day5_couple3"></datalist>   
-                <datalist id="subjects_day5_couple4"></datalist>   
-                <datalist id="subjects_day5_couple5"></datalist>   
-                <datalist id="subjects_day5_couple6"></datalist>   
-            </div>
-            <div class="datalist_subjects_day6">
-                <datalist id="subjects_day6_couple1"></datalist>   
-                <datalist id="subjects_day6_couple2"></datalist>   
-                <datalist id="subjects_day6_couple3"></datalist>   
-                <datalist id="subjects_day6_couple4"></datalist>   
-                <datalist id="subjects_day6_couple5"></datalist>   
-                <datalist id="subjects_day6_couple6"></datalist>   
-            </div>
-        `
-        document.getElementsByClassName("datalist_subjects")[0].innerHTML = html
-        addOfficeSort()
-        addSubject()
-        addProfessorSort()
-    } else {
-        alert("Действие отменено.");
+function func_remove_config(checkObj){
+    if(checkObj.type != null){
+        if (confirm("Вы уверены, что хотите продолжить?")) {
+            //TDO вроде как не хватает удаление блоков
+            remove_config_items()
+        } else {
+            alert("Действие отменено.");
+        }
     }
-   
+    else{
+        remove_config_items()
+    }
 
 }
+function remove_config_items() {
+    
+    localStorage.setItem("saveConfig", JSON.stringify({"finallArrOffice":basicData.arrOffice,"finallArrProfessor":basicData.arrProfessor}))
+
+    localStorage.removeItem("date")
+    document.getElementsByClassName("office_sort")[0].innerHTML = ""
+    document.getElementsByClassName("professor_sort")[0].innerHTML = ""
+    let html = `
+        <div class="datalist_subjects_day1">
+            <datalist id="subjects_day1_couple1"></datalist>   
+            <datalist id="subjects_day1_couple2"></datalist>   
+            <datalist id="subjects_day1_couple3"></datalist>   
+            <datalist id="subjects_day1_couple4"></datalist>   
+            <datalist id="subjects_day1_couple5"></datalist>   
+            <datalist id="subjects_day1_couple6"></datalist>   
+        </div>
+        <div class="datalist_subjects_day2">
+            <datalist id="subjects_day2_couple1"></datalist>   
+            <datalist id="subjects_day2_couple2"></datalist>   
+            <datalist id="subjects_day2_couple3"></datalist>   
+            <datalist id="subjects_day2_couple4"></datalist>   
+            <datalist id="subjects_day2_couple5"></datalist>   
+            <datalist id="subjects_day2_couple6"></datalist>   
+        </div>
+        <div class="datalist_subjects_day3">
+            <datalist id="subjects_day3_couple1"></datalist>   
+            <datalist id="subjects_day3_couple2"></datalist>   
+            <datalist id="subjects_day3_couple3"></datalist>   
+            <datalist id="subjects_day3_couple4"></datalist>   
+            <datalist id="subjects_day3_couple5"></datalist>   
+            <datalist id="subjects_day3_couple6"></datalist>   
+        </div>
+        <div class="datalist_subjects_day4">
+            <datalist id="subjects_day4_couple1"></datalist>   
+            <datalist id="subjects_day4_couple2"></datalist>   
+            <datalist id="subjects_day4_couple3"></datalist>   
+            <datalist id="subjects_day4_couple4"></datalist>   
+            <datalist id="subjects_day4_couple5"></datalist>   
+            <datalist id="subjects_day4_couple6"></datalist>   
+        </div>
+        <div class="datalist_subjects_day5">
+            <datalist id="subjects_day5_couple1"></datalist>   
+            <datalist id="subjects_day5_couple2"></datalist>   
+            <datalist id="subjects_day5_couple3"></datalist>   
+            <datalist id="subjects_day5_couple4"></datalist>   
+            <datalist id="subjects_day5_couple5"></datalist>   
+            <datalist id="subjects_day5_couple6"></datalist>   
+        </div>
+        <div class="datalist_subjects_day6">
+            <datalist id="subjects_day6_couple1"></datalist>   
+            <datalist id="subjects_day6_couple2"></datalist>   
+            <datalist id="subjects_day6_couple3"></datalist>   
+            <datalist id="subjects_day6_couple4"></datalist>   
+            <datalist id="subjects_day6_couple5"></datalist>   
+            <datalist id="subjects_day6_couple6"></datalist>   
+        </div>
+    `
+    document.getElementsByClassName("datalist_subjects")[0].innerHTML = html
+    addOfficeSort()
+    addSubject()
+    addProfessorSort()
+}
+
+
 function func_remove_data(checkObj){
     if(checkObj.type != null){
         if (confirm("Вы уверены, что хотите продолжить?")) {
