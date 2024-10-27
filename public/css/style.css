@@ -60,6 +60,11 @@ td{
     display: flex;
     justify-content: space-between;
 }
+.offical_stule{
+    width: 70px;
+    display: flex;
+    justify-content: space-between;
+}
 .carts_office_sort{
     border: solid black 0.5px;
 

@@ -228,27 +228,27 @@ function addOfficeSort(){
             }
             htmlCode2 = `
                 <span>${day}</span>
-                <div class="profesor_stule">
+                <div class="offical_stule">
                     <span>пара 1</span>
                     <input type="button" value="-" class="swit_office_day_${ind}_parry_${i}" onclick="office_day_parry_swit(this)">
                 </div>
-                <div class="profesor_stule">
+                <div class="offical_stule">
                     <span>пара 2</span>
                     <input type="button" value="-" class="swit_office_day_${ind}_parry_${i}" onclick="office_day_parry_swit(this)">
                 </div>
-                <div class="profesor_stule">
+                <div class="offical_stule">
                     <span>пара 3</span>
                     <input type="button" value="-" class="swit_office_day_${ind}_parry_${i}" onclick="office_day_parry_swit(this)">
                 </div>
-                <div class="profesor_stule">
+                <div class="offical_stule">
                     <span>пара 4</span>
                     <input type="button" value="-" class="swit_office_day_${ind}_parry_${i}" onclick="office_day_parry_swit(this)">
                 </div>
-                <div class="profesor_stule">
+                <div class="offical_stule">
                     <span>пара 5</span>
                     <input type="button" value="-" class="swit_office_day_${ind}_parry_${i}" onclick="office_day_parry_swit(this)">
                 </div>
-                <div class="profesor_stule">
+                <div class="offical_stule">
                     <span>пара 6</span>
                     <input type="button" value="-" class="swit_office_day_${ind}_parry_${i}" onclick="office_day_parry_swit(this)">
                 </div>
