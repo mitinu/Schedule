@@ -160,6 +160,7 @@ function addListHours(table_rows){
         if(data.arrListHours[i].idProfessor==idProfessor&&data.arrListHours[i].idSubject==idSubject&&data.arrListHours[i].idGroup==idGroup){
             data.arrListHours[i].addHours(hours)
             swit = false
+            break
         }
     }
     if (swit) {
