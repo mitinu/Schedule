@@ -189,7 +189,7 @@ function addOfficeSort(){
         <div class="carts_office_sort">
             <div class='roll_office'>
                 <span class="addres_office"></span>
-                <input type="button" value="-" class="office_swit" onclick="office_day_swit(this)">
+                <input type="button" value="+" class="office_swit" onclick="office_day_swit(this)">
             </div>
             <div class="cart_office_days_sort">
                 <div class="day_office1"></div>
@@ -298,7 +298,7 @@ function addProfessorSort() {
         <div class="carts_professor_sort">
             <div class="roll_professor">
                 <span class="fullName_professor"></span>
-                <input type="button" value="-" class="professor_swit" onclick="professor_swit(this)">
+                <input type="button" value="+" class="professor_swit" onclick="professor_swit(this)">
             </div>
             <div class="days_professor display-flex">
                 <div class="day_professor1"></div>
