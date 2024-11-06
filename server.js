@@ -110,19 +110,21 @@ function addSubject(table_rows){
     }
 }
 function returnIdCours(str){
-    switch(parseInt(str.split(" ")[1][1])){
-        case 1:
-            return 3
-            break
-        case 2:
-            return 2
-            break
-        case 3:
-            return 1
-            break
-        case 4:
-            return 0
-            break
+    if (new Date().getMonth()<7) {
+        switch(parseInt(str.split(" ")[1][1])){
+            case new Date().getFullYear()-2024: return 3
+            case new Date().getFullYear()-2023: return 2
+            case new Date().getFullYear()-2022: return 1
+            case new Date().getFullYear()-2021: return 0
+        }
+    }
+    else{
+        switch(parseInt(str.split(" ")[1][1])){
+            case new Date().getFullYear()-2023: return 3
+            case new Date().getFullYear()-2022: return 2
+            case new Date().getFullYear()-2021: return 1
+            case new Date().getFullYear()-2020: return 0
+        }
     }
 }
 function addGrup(table_rows){
