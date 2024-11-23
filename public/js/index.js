@@ -186,7 +186,7 @@ function addGrup() {
 
 function addOfficeSort(){
     htmlCode = `
-        <div class="carts_office_sort">
+        <div class="carts_office_sort" ondblclick="office_day_swit(this)">
             <div class='roll_office'>
                 <span class="addres_office"></span>
                 <input type="button" value="+" class="office_swit" onclick="office_day_swit(this)">
@@ -295,7 +295,7 @@ function addSubject() {
 
 function addProfessorSort() {
     htmlCode = `
-        <div class="carts_professor_sort">
+        <div class="carts_professor_sort"  ondblclick="professor_swit(this)">
             <div class="roll_professor">
                 <span class="fullName_professor"></span>
                 <input type="button" value="+" class="professor_swit" onclick="professor_swit(this)">
@@ -800,8 +800,13 @@ function getGroup(id){
 }
 
 function office_day_swit(thisButt){ 
-    office_swit_style = document.getElementsByClassName("cart_office_days_sort")[Array.from(document.getElementsByClassName("office_swit")).findIndex(button => button == thisButt)].style
-    index_office = Array.from(document.getElementsByClassName("office_swit")).findIndex(button => button == thisButt)
+    if (thisButt.className != "office_swit") {
+        office_swit_style = document.getElementsByClassName("cart_office_days_sort")[Array.from(document.getElementsByClassName("carts_office_sort")).findIndex(button => button == thisButt)].style
+        thisButt = document.getElementsByClassName("office_swit")[Array.from(document.getElementsByClassName("carts_office_sort")).findIndex(button => button == thisButt)]
+    }
+    else{
+        office_swit_style = document.getElementsByClassName("cart_office_days_sort")[Array.from(document.getElementsByClassName("office_swit")).findIndex(button => button == thisButt)].style
+    }
     if(thisButt.value == "+"){
         thisButt.value = "-"
         office_swit_style.display = "flex"
@@ -844,7 +849,14 @@ function professor_day_parry_swit(thisButt){{}
 
 }
 function professor_swit(thisButt){
-    professor_swit_style = document.getElementsByClassName("days_professor")[Array.from(document.getElementsByClassName("professor_swit")).findIndex(button => button == thisButt)].style
+    if (thisButt.className != "professor_swit") {
+        professor_swit_style = document.getElementsByClassName("days_professor")[Array.from(document.getElementsByClassName("carts_professor_sort")).findIndex(button => button == thisButt)].style
+        thisButt = document.getElementsByClassName("professor_swit")[Array.from(document.getElementsByClassName("carts_professor_sort")).findIndex(button => button == thisButt)]
+    }
+    else{
+        professor_swit_style = document.getElementsByClassName("days_professor")[Array.from(document.getElementsByClassName("professor_swit")).findIndex(button => button == thisButt)].style
+        
+    }
     if(thisButt.value == "+"){
         thisButt.value = "-"
         professor_swit_style.display = "flex"

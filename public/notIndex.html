@@ -161,12 +161,12 @@
         </div>
     </div>
     <header>
-        <input type="button" value="обновлениен данных(cбрасывает сохронение)" onclick="uploading_data()">
-        <input type="button" id="save_data" value="временое сохронение расписание" onclick="save_data()">
-        <input type="button" id="save_config" value="временое сохронение конфигов" onclick="save_config()">
-        <input type="button" value="сброс сохронение расписания" onclick="func_remove_data(this)">
-        <input type="button" value="сброс сохронение конфигов" onclick="func_remove_config(this)">
-        <input type="button" id="complete_data" value="завершить растовление расписание" onclick="complete_data()">
+        <input type="button" value="загрузить тарификацию" onclick="uploading_data()">
+        <input type="button" id="save_config" value="сохронение параметров настройки" onclick="save_config()">
+        <input type="button" value="сбросить параметры настройки" onclick="func_remove_config()">
+        <input type="button" id="save_data" value="сохроненить расписание" onclick="save_data()">
+        <input type="button" value="сбросить расписание" onclick="func_remove_data(this)">
+        <input type="button" id="complete_data" value="завершить расписание" onclick="complete_data()">
         <input type="date" id="date" onblur="resetDate(this)"><font color="white">выбирите пн</font>
     </header>
     
