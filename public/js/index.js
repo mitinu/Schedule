@@ -1,3 +1,24 @@
+document.getElementById("sorting_ready").addEventListener('click', function() {
+    addOffice()
+    addProfessor()
+});
+document.getElementById("remove_config").addEventListener('click', function() {
+    if (confirm("Вы уверены, что хотите продолжить?")) {
+        remove_config_items()
+    } 
+    else {
+        alert("Действие отменено.");
+    }
+});
+document.getElementById("remove_data").addEventListener('click', function() {
+    if (confirm("Вы уверены, что хотите продолжить?")) {
+        remove_data_items()
+        addGrup()
+    } 
+    else {
+        alert("Действие отменено.");
+    }
+});
 
 async function getDate(){
     remove_data_html()
@@ -261,21 +282,24 @@ function addOfficeSort(){
             }
         }
     }
-    document.getElementsByClassName("office_sort")[0].innerHTML += '<input type="button" value="готово" onclick="addOffice()">'
     addOffice()
     
 }    
+//TODO сокротить добавиь константы дней и времени
 function addOffice() {
     for (let ind = 1; ind < 7; ind++) {
         for (let j = 1; j < 7; j++) {
             document.getElementById("offices_day"+ind+"_couple"+j).innerHTML = ""            
+    
+
         }
     }
-    for (let i = 0; i < basicData.arrOffice.length; i++) {
-        for (let ind = 0; ind < basicData.arrOffice[i].days_parrys.length; ind++) {
-            for (let j = 0; j < basicData.arrOffice[i].days_parrys[ind].length; j++) {
-                if(basicData.arrOffice[i].days_parrys[ind][j]){
-                    document.getElementById("offices_day"+(ind+1)+"_couple"+(j+1)).innerHTML += '<option value="'+basicData.arrOffice[i].id+'">'
+    console.log()
+    for (let i = 0; i < saveConfig.finallArrOffice.length; i++) {
+        for (let ind = 0; ind < saveConfig.finallArrOffice[i].days_parrys.length; ind++) {
+            for (let j = 0; j < saveConfig.finallArrOffice[i].days_parrys[ind].length; j++) {
+                if(saveConfig.finallArrOffice[i].days_parrys[ind][j]){
+                    document.getElementById("offices_day"+(ind+1)+"_couple"+(j+1)).innerHTML += '<option value="'+saveConfig.finallArrOffice[i].id+'">'
                 }
             }
         }
@@ -371,9 +395,9 @@ function addProfessorSort() {
             
         }
     }
-    document.getElementsByClassName("professor_sort")[0].innerHTML += '<input type="button" value="готово" onclick="addProfessor()">'
     addProfessor()
 }
+//TODO сокротить добавиь константы дней и времени
 function addProfessor() {
     for (let ind = 1; ind < 7; ind++) {
         for (let j = 1; j < 7; j++) {
@@ -391,7 +415,6 @@ function addProfessor() {
         }
     }
 }
-
 
 
 function resetDate(data){
@@ -465,10 +488,9 @@ async function uploading_data(){
             
             
         })
-        
-        func_remove_config(this)
-        func_remove_data(this)
-
+        remove_config_items()
+        remove_data_items()
+        addGrup()
     } else {
         alert("Действие отменено.");
     }
@@ -476,102 +498,28 @@ async function uploading_data(){
 }
 
 
-function func_remove_config(checkObj){
-    if(checkObj.type != null){
-        if (confirm("Вы уверены, что хотите продолжить?")) {
-            //TDO вроде как не хватает удаление блоков
-            remove_config_items()
-        } else {
-            alert("Действие отменено.");
-        }
-    }
-    else{
-        remove_config_items()
-    }
 
-}
 function remove_config_items() {
-    
     localStorage.setItem("saveConfig", JSON.stringify({"finallArrOffice":basicData.arrOffice,"finallArrProfessor":basicData.arrProfessor}))
+    saveConfig.finallArrOffice=basicData.arrOffice
+    saveConfig.finallArrProfessor=basicData.arrProfessor
 
     localStorage.removeItem("date")
     document.getElementsByClassName("office_sort")[0].innerHTML = ""
     document.getElementsByClassName("professor_sort")[0].innerHTML = ""
-    let html = `
-        <div class="datalist_subjects_day1">
-            <datalist id="subjects_day1_couple1"></datalist>   
-            <datalist id="subjects_day1_couple2"></datalist>   
-            <datalist id="subjects_day1_couple3"></datalist>   
-            <datalist id="subjects_day1_couple4"></datalist>   
-            <datalist id="subjects_day1_couple5"></datalist>   
-            <datalist id="subjects_day1_couple6"></datalist>   
-        </div>
-        <div class="datalist_subjects_day2">
-            <datalist id="subjects_day2_couple1"></datalist>   
-            <datalist id="subjects_day2_couple2"></datalist>   
-            <datalist id="subjects_day2_couple3"></datalist>   
-            <datalist id="subjects_day2_couple4"></datalist>   
-            <datalist id="subjects_day2_couple5"></datalist>   
-            <datalist id="subjects_day2_couple6"></datalist>   
-        </div>
-        <div class="datalist_subjects_day3">
-            <datalist id="subjects_day3_couple1"></datalist>   
-            <datalist id="subjects_day3_couple2"></datalist>   
-            <datalist id="subjects_day3_couple3"></datalist>   
-            <datalist id="subjects_day3_couple4"></datalist>   
-            <datalist id="subjects_day3_couple5"></datalist>   
-            <datalist id="subjects_day3_couple6"></datalist>   
-        </div>
-        <div class="datalist_subjects_day4">
-            <datalist id="subjects_day4_couple1"></datalist>   
-            <datalist id="subjects_day4_couple2"></datalist>   
-            <datalist id="subjects_day4_couple3"></datalist>   
-            <datalist id="subjects_day4_couple4"></datalist>   
-            <datalist id="subjects_day4_couple5"></datalist>   
-            <datalist id="subjects_day4_couple6"></datalist>   
-        </div>
-        <div class="datalist_subjects_day5">
-            <datalist id="subjects_day5_couple1"></datalist>   
-            <datalist id="subjects_day5_couple2"></datalist>   
-            <datalist id="subjects_day5_couple3"></datalist>   
-            <datalist id="subjects_day5_couple4"></datalist>   
-            <datalist id="subjects_day5_couple5"></datalist>   
-            <datalist id="subjects_day5_couple6"></datalist>   
-        </div>
-        <div class="datalist_subjects_day6">
-            <datalist id="subjects_day6_couple1"></datalist>   
-            <datalist id="subjects_day6_couple2"></datalist>   
-            <datalist id="subjects_day6_couple3"></datalist>   
-            <datalist id="subjects_day6_couple4"></datalist>   
-            <datalist id="subjects_day6_couple5"></datalist>   
-            <datalist id="subjects_day6_couple6"></datalist>   
-        </div>
-    `
-    document.getElementsByClassName("datalist_subjects")[0].innerHTML = html
     addOfficeSort()
-    addSubject()
     addProfessorSort()
 }
 
 
-function func_remove_data(checkObj){
-    if(checkObj.type != null){
-        if (confirm("Вы уверены, что хотите продолжить?")) {
-            remove_data_items()
-        } else {
-            alert("Действие отменено.");
-        }
-    }
-    else{
-        remove_data_items()
-    }
-    addGrup()
-}
+
 function remove_data_items(){
     localStorage.removeItem("saveDataTable")
+    // TODO saveDataTable удалить надо
     remove_data_html()
 }   
 function remove_data_html() {
+    console.log("dad")
     for (let i = 1; i <= 4; i++) {
         for (let j = 0; j < 6; j++) {
             document.getElementsByClassName("content_grups_course"+(i))[j].innerHTML = ""
@@ -583,7 +531,6 @@ function redirectionChekDate(){
     const redirectionChekDate = new URL(location.href+"redirectionChekDate")
     location.href = redirectionChekDate.href
 }   
-
 
 
 function complete_data(){   
@@ -629,7 +576,8 @@ function complete_data(){
             alert("данные не отправлены на сервер выберите дату")
         }
         
-        func_remove_data(this)
+        remove_data_items()
+        addGrup()
     } 
     else {
         alert("Действие отменено.");
