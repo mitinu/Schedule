@@ -19,6 +19,13 @@ document.getElementById("remove_data").addEventListener('click', function() {
         alert("Действие отменено.");
     }
 });
+document.getElementById("save_config").addEventListener('click', function() {
+    localStorage.setItem("saveConfig", JSON.stringify(saveConfig))
+    if (date != null) {
+        localStorage.setItem("date", JSON.stringify(date))
+    }
+});
+
 
 async function getDate(){
     remove_data_html()
@@ -294,7 +301,6 @@ function addOffice() {
 
         }
     }
-    console.log()
     for (let i = 0; i < saveConfig.finallArrOffice.length; i++) {
         for (let ind = 0; ind < saveConfig.finallArrOffice[i].days_parrys.length; ind++) {
             for (let j = 0; j < saveConfig.finallArrOffice[i].days_parrys[ind].length; j++) {
@@ -462,15 +468,6 @@ function save_data(){
     localStorage.setItem("saveDataTable", JSON.stringify(saveDataTable))
 
 }
-function save_config(){
-
-    localStorage.setItem("saveConfig", JSON.stringify(saveConfig))
-    if (date != null) {
-        localStorage.setItem("date", JSON.stringify(date))
-    }
-    
-
-}
 
 async function uploading_data(){
     
@@ -500,11 +497,9 @@ async function uploading_data(){
 
 
 function remove_config_items() {
-    localStorage.setItem("saveConfig", JSON.stringify({"finallArrOffice":basicData.arrOffice,"finallArrProfessor":basicData.arrProfessor}))
     saveConfig.finallArrOffice=basicData.arrOffice
     saveConfig.finallArrProfessor=basicData.arrProfessor
-
-    localStorage.removeItem("date")
+    localStorage.setItem("saveConfig", JSON.stringify(saveConfig))
     document.getElementsByClassName("office_sort")[0].innerHTML = ""
     document.getElementsByClassName("professor_sort")[0].innerHTML = ""
     addOfficeSort()
@@ -519,7 +514,6 @@ function remove_data_items(){
     remove_data_html()
 }   
 function remove_data_html() {
-    console.log("dad")
     for (let i = 1; i <= 4; i++) {
         for (let j = 0; j < 6; j++) {
             document.getElementsByClassName("content_grups_course"+(i))[j].innerHTML = ""
@@ -662,7 +656,6 @@ function loadXLSX() {
                 }   
             }
         }
-            // console.log(arrCourseGroups.slice())
         index_group += basicData.arrCourseGroups[i_curs].length;
     }
 
