@@ -515,7 +515,7 @@ function remove_config_items() {
 
 function remove_data_items(){
     localStorage.removeItem("saveDataTable")
-    // TODO saveDataTable удалить надо
+    saveDataTable = null
     remove_data_html()
 }   
 function remove_data_html() {
