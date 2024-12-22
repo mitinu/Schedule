@@ -106,3 +106,10 @@ header *{
 .roll_office {
     min-width: 65px;
 }
+#sorting_ready{
+    width: 150px;
+}
+.sort_button_roll{
+    display: flex;
+    justify-content: space-between;
+}

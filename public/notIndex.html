@@ -171,9 +171,13 @@
     </header>
     
     <div class="sort">
-        <input type="button" value="-" class="roll" onclick="rollFunc(this)"> 
-        сортировка
-        <input type="button" value="готово" id="sorting_ready">
+        <div class="sort_button_roll">
+            <span>
+                <input type="button" value="-" class="roll" onclick="rollFunc(this)"> 
+                сортировка
+            </span>
+            <input type="button" value="готово" id="sorting_ready">
+        </div>
         <div class="content">
             <div class="office_sort display-flex"></div>
             <div class="professor_sort display-flex"></div>
@@ -995,10 +999,7 @@
         </div>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
-
-    
     <script src="/js/CONST.js"></script>
     <script src="/js/index.js"></script>
-    
 </body>
 </html>
