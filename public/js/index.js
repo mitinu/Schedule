@@ -27,6 +27,119 @@ document.getElementById("save_config").addEventListener('click', function() {
 });
 
 
+
+function subject_sort(thisText){
+    let swith = true
+    const arrSubject = basicData.arrSubject
+    document.getElementById("datalist_professors_"+thisText.list.id.split("_").splice(2, 3).join('_')).innerHTML = ""
+    for (let i = 0; i < arrSubject.length; i++) {
+        if (arrSubject[i].name == thisText.value) {
+            const arrListHours = basicData.arrListHours
+            const arrName = []
+            for (let j = 0; j < arrListHours.length; j++) {
+                if (arrListHours[j].idSubject==arrSubject[i].id) {
+                    const arrProfessor = basicData.arrProfessor
+                    for (let ind = 0; ind < arrProfessor.length; ind++) {
+                        if (arrProfessor[ind].id==arrListHours[j].idProfessor) {
+                            if (arrName.length==0) {
+                                arrName.push(arrProfessor[ind].name)
+                                const newOption = document.createElement('option');
+                                newOption.value = arrProfessor[ind].name;
+                                document.getElementById("datalist_professors_"+thisText.list.id.split("_").splice(2, 3).join('_')).appendChild(newOption)
+                            }
+                            else{
+                                let swith2 = true
+                                for (let index = 0; index < arrName.length; index++) {
+                                    if (arrName[index]==arrProfessor[ind].name) {
+                                        swith2 = false
+                                    }
+                                }
+                                if (swith2) {
+                                    console.log("Dawda2")
+                                    arrName.push(arrProfessor[ind].name)
+                                    const newOption = document.createElement('option');
+                                    newOption.value = arrProfessor[ind].name;
+                                    document.getElementById("datalist_professors_"+thisText.list.id.split("_").splice(2, 3).join('_')).appendChild(newOption)
+                                }
+                            }
+                            break
+                        }
+                    }
+                } 
+            }
+            swith = false
+            break
+        }
+    }
+    
+    if (swith) {
+        for (let i_Professor = 0; i_Professor < saveConfig.finallArrProfessor.length; i_Professor++) {
+            const newOption = document.createElement('option');
+            newOption.value = saveConfig.finallArrProfessor[i_Professor].name;
+            document.getElementById("datalist_professors_"+thisText.list.id.split("_").splice(2, 3).join('_')).appendChild(newOption)
+
+        }
+    }
+    
+}
+
+function professors_sort(thisText){
+    let swith = true
+    const arrProfessor = saveConfig.finallArrProfessor
+    document.getElementById("datalist_subjects_"+thisText.list.id.split("_").splice(2, 3).join('_')).innerHTML = ""
+    for (let i = 0; i < arrProfessor.length; i++) {
+        if (arrProfessor[i].name == thisText.value) {
+            const arrListHours = basicData.arrListHours
+            const arrName = []
+            for (let j = 0; j < arrListHours.length; j++) {
+                if (arrListHours[j].idSubject==arrProfessor[i].id) {
+                    const arrSubject1 = basicData.arrSubject
+                    for (let ind = 0; ind < arrSubject1.length; ind++) {
+                        if (arrSubject1[ind].id==arrListHours[j].idProfessor) {
+                            if (arrName.length==0) {
+                                arrName.push(arrSubject1[ind].name)
+                                const newOption = document.createElement('option');
+                                newOption.value = arrSubject1[ind].name;
+                                document.getElementById("datalist_subjects_"+thisText.list.id.split("_").splice(2, 3).join('_')).appendChild(newOption)
+                            }
+                            else{
+                                let swith2 = true
+                                for (let index = 0; index < arrName.length; index++) {
+                                    if (arrName[index]==arrSubject1[ind].name) {
+                                        swith2 = false
+                                    }
+                                }
+                                if (swith2) {
+                                    console.log("Dawda2")
+                                    arrName.push(arrSubject1[ind].name)
+                                    const newOption = document.createElement('option');
+                                    newOption.value = arrSubject1[ind].name;
+                                    document.getElementById("datalist_subjects_"+thisText.list.id.split("_").splice(2, 3).join('_')).appendChild(newOption)
+                                }
+                            }
+                            break
+                        }
+                    }
+                } 
+            }
+            swith = false
+            break
+        }
+    }
+    
+    if (swith) {
+        for (let i_Subject = 0; i_Subject < basicData.arrSubject.length; i_Subject++) {
+            const newOption = document.createElement('option');
+            newOption.value = basicData.arrSubject[i_Subject].name;
+            document.getElementById("datalist_subjects_"+thisText.list.id.split("_").splice(2, 3).join('_')).appendChild(newOption)
+
+        }
+    }
+    
+}
+
+
+
 async function getDate(){
     remove_data_html()
 
@@ -140,58 +253,57 @@ function startIndex() {
 
 function addGrup() {
     for (let index = 0; index < basicData.arrCourseGroups.length; index++) {
-        days_length = 6
-        for (let i = 0; i < days_length; i++) {
-            htmlCode = `                
-                <table>
-                    <tr>
-                        <td colspan="2" class="name_groups_course${(index+1)}_day${i}"></td>
-                    </tr>
-                    <tr>
-                        <td><input list="subjects_day${(i+1)}_couple1" class="subjects subjects_day${(i+1)}_couple1"></td>
-                        <td rowspan="2"><input list="offices_day${(i+1)}_couple1" class="offices offices_day${(i+1)}_couple1" oninput="checkRepetitions(this)"></td>
-                    </tr>
-                    <tr>
-                        <td><input list="professors_day${(i+1)}_couple1" class="professors professors_day${(i+1)}_couple1" oninput="checkRepetitions(this)"></td>
-                    </tr>
-                    <tr>
-                        <td><input list="subjects_day${(i+1)}_couple2" class="subjects subjects_day${(i+1)}_couple2"></td>
-                        <td rowspan="2"><input list="offices_day${(i+1)}_couple2" class="offices offices_day${(i+1)}_couple2" oninput="checkRepetitions(this)"></td>
-                    </tr>
-                    <tr>
-                        <td><input list="professors_day${(i+1)}_couple2" class="professors professors_day${(i+1)}_couple2" oninput="checkRepetitions(this)"></td>
-                    </tr>
-                    <tr>
-                        <td><input list="subjects_day${(i+1)}_couple3" class="subjects subjects_day${(i+1)}_couple3"></td>
-                        <td rowspan="2"><input list="offices_day${(i+1)}_couple3" class="offices offices_day${(i+1)}_couple3" oninput="checkRepetitions(this)"></td>
-                    </tr>
-                    <tr>
-                        <td><input list="professors_day${(i+1)}_couple3" class="professors professors_day${(i+1)}_couple3" oninput="checkRepetitions(this)"></td>
-                    </tr>
-                    <tr>
-                        <td><input list="subjects_day${(i+1)}_couple4" class="subjects subjects_day${(i+1)}_couple4"></td>
-                        <td rowspan="2"><input list="offices_day${(i+1)}_couple4" class="offices offices_day${(i+1)}_couple4" oninput="checkRepetitions(this)"></td>
-                    </tr>
-                    <tr>
-                        <td><input list="professors_day${(i+1)}_couple4" class="professors professors_day${(i+1)}_couple4" oninput="checkRepetitions(this)"></td>
-                    </tr>
-                    <tr>
-                        <td><input list="subjects_day${(i+1)}_couple5" class="subjects subjects_day${(i+1)}_couple5"></td>
-                        <td rowspan="2"><input list="offices_day${(i+1)}_couple5" class="offices offices_day${(i+1)}_couple5" oninput="checkRepetitions(this)"></td>
-                    </tr>
-                    <tr>
-                        <td><input list="professors_day${(i+1)}_couple5" class="professors professors_day${(i+1)}_couple5" oninput="checkRepetitions(this)"></td>
-                    </tr>
-                    <tr>
-                        <td><input list="subjects_day${(i+1)}_couple6" class="subjects subjects_day${(i+1)}_couple6"></td>
-                        <td rowspan="2"><input list="offices_day${(i+1)}_couple6" class="offices offices_day${(i+1)}_couple6" oninput="checkRepetitions(this)"></td>
-                    </tr>
-                    <tr>
-                        <td><input list="professors_day${(i+1)}_couple6" class="professors professors_day${(i+1)}_couple6" oninput="checkRepetitions(this)"></td>
-                    </tr>
-                </table>
-            `
+        for (let i = 0; i < DAY_LENTH; i++) {
             for (let j = 0; j < basicData.arrCourseGroups[index].length; j++) {
+                htmlCode = `                
+                    <table>
+                        <tr>
+                            <td colspan="2" class="name_groups_course${(index+1)}_day${i}"></td>
+                        </tr>
+                        <tr>
+                            <td><input list="datalist_subjects_day${(i+1)}_couple1_groupID${basicData.arrCourseGroups[index][j].id}" class="subjects subjects_day${(i+1)}_couple1" onblur="subject_sort(this)"></td>
+                            <td rowspan="2"><input list="datalist_offices_day${(i+1)}_couple1_groupID${basicData.arrCourseGroups[index][j].id}" class="offices offices_day${(i+1)}_couple1" oninput="checkRepetitions(this)"></td>
+                        </tr>
+                        <tr>
+                            <td><input list="datalist_professors_day${(i+1)}_couple1_groupID${basicData.arrCourseGroups[index][j].id}" class="professors professors_day${(i+1)}_couple1" oninput="checkRepetitions(this)" onblur="professors_sort(this)"></td>
+                        </tr>
+                        <tr>
+                            <td><input list="datalist_subjects_day${(i+1)}_couple2_groupID${basicData.arrCourseGroups[index][j].id}" class="subjects subjects_day${(i+1)}_couple2" onblur="subject_sort(this)"></td>
+                            <td rowspan="2"><input list="datalist_offices_day${(i+1)}_couple2_groupID${basicData.arrCourseGroups[index][j].id}" class="offices offices_day${(i+1)}_couple2" oninput="checkRepetitions(this)"></td>
+                        </tr>
+                        <tr>
+                            <td><input list="datalist_professors_day${(i+1)}_couple2_groupID${basicData.arrCourseGroups[index][j].id}" class="professors professors_day${(i+1)}_couple2" oninput="checkRepetitions(this)" onblur="professors_sort(this)"></td>
+                        </tr>
+                        <tr>
+                            <td><input list="datalist_subjects_day${(i+1)}_couple3_groupID${basicData.arrCourseGroups[index][j].id}" class="subjects subjects_day${(i+1)}_couple3" onblur="subject_sort(this)"></td>
+                            <td rowspan="2"><input list="datalist_offices_day${(i+1)}_couple3_groupID${basicData.arrCourseGroups[index][j].id}" class="offices offices_day${(i+1)}_couple3" oninput="checkRepetitions(this)"></td>
+                        </tr>
+                        <tr>
+                            <td><input list="datalist_professors_day${(i+1)}_couple3_groupID${basicData.arrCourseGroups[index][j].id}" class="professors professors_day${(i+1)}_couple3" oninput="checkRepetitions(this)" onblur="professors_sort(this)"></td>
+                        </tr>
+                        <tr>
+                            <td><input list="datalist_subjects_day${(i+1)}_couple4_groupID${basicData.arrCourseGroups[index][j].id}" class="subjects subjects_day${(i+1)}_couple4" onblur="subject_sort(this)"></td>
+                            <td rowspan="2"><input list="datalist_offices_day${(i+1)}_couple4_groupID${basicData.arrCourseGroups[index][j].id}" class="offices offices_day${(i+1)}_couple4" oninput="checkRepetitions(this)"></td>
+                        </tr>
+                        <tr>
+                            <td><input list="datalist_professors_day${(i+1)}_couple4_groupID${basicData.arrCourseGroups[index][j].id}" class="professors professors_day${(i+1)}_couple4" oninput="checkRepetitions(this)" onblur="professors_sort(this)"></td>
+                        </tr>
+                        <tr>
+                            <td><input list="datalist_subjects_day${(i+1)}_couple5_groupID${basicData.arrCourseGroups[index][j].id}" class="subjects subjects_day${(i+1)}_couple5" onblur="subject_sort(this)"></td>
+                            <td rowspan="2"><input list="datalist_offices_day${(i+1)}_couple5_groupID${basicData.arrCourseGroups[index][j].id}" class="offices offices_day${(i+1)}_couple5" oninput="checkRepetitions(this)"></td>
+                        </tr>
+                        <tr>
+                            <td><input list="datalist_professors_day${(i+1)}_couple5_groupID${basicData.arrCourseGroups[index][j].id}" class="professors professors_day${(i+1)}_couple5" oninput="checkRepetitions(this)" onblur="professors_sort(this)"></td>
+                        </tr>
+                        <tr>
+                            <td><input list="datalist_subjects_day${(i+1)}_couple6_groupID${basicData.arrCourseGroups[index][j].id}" class="subjects subjects_day${(i+1)}_couple6" onblur="subject_sort(this)"></td>
+                            <td rowspan="2"><input list="datalist_offices_day${(i+1)}_couple6_groupID${basicData.arrCourseGroups[index][j].id}" class="offices offices_day${(i+1)}_couple6" oninput="checkRepetitions(this)"></td>
+                        </tr>
+                        <tr>
+                            <td><input list="datalist_professors_day${(i+1)}_couple6_groupID${basicData.arrCourseGroups[index][j].id}" class="professors professors_day${(i+1)}_couple6" oninput="checkRepetitions(this)" onblur="professors_sort(this)"></td>
+                        </tr>
+                    </table>
+                `
                 document.getElementsByClassName("content_grups_course"+(index+1))[i].innerHTML += htmlCode
                 document.getElementsByClassName("name_groups_course"+(index+1)+"_day"+i)[j].innerHTML = basicData.arrCourseGroups[index][j].name
             } 
@@ -294,30 +406,71 @@ function addOfficeSort(){
 }    
 //TODO сокротить добавиь константы дней и времени
 function addOffice() {
-    for (let ind = 1; ind < 7; ind++) {
-        for (let j = 1; j < 7; j++) {
-            document.getElementById("offices_day"+ind+"_couple"+j).innerHTML = ""            
+    // for (let ind = 1; ind < 7; ind++) {
+    //     for (let j = 1; j < 7; j++) {
+    //         document.getElementById("offices_day"+ind+"_couple"+j).innerHTML = ""            
     
 
-        }
+    //     }
+    // }
+    for (let i = 1; i < DAY_LENTH+1; i++) {
+        for (let j = 1; j < 7; j++) {
+            for (let ind = 0; ind < basicData.arrCourseGroups.length; ind++) {
+                for (let index = 0; index < basicData.arrCourseGroups[ind].length; index++) {
+                    const datalistElement = document.createElement('datalist');
+                    datalistElement.id = `datalist_offices_day${i}_couple${j}_groupID${basicData.arrCourseGroups[ind][index].id}`
+                    document.getElementById(`datalist_offices_day${i}_couple${j}`).appendChild(datalistElement)
+                }                
+            }
+            
+        }        
     }
-    for (let i = 0; i < saveConfig.finallArrOffice.length; i++) {
-        for (let ind = 0; ind < saveConfig.finallArrOffice[i].days_parrys.length; ind++) {
-            for (let j = 0; j < saveConfig.finallArrOffice[i].days_parrys[ind].length; j++) {
-                if(saveConfig.finallArrOffice[i].days_parrys[ind][j]){
-                    document.getElementById("offices_day"+(ind+1)+"_couple"+(j+1)).innerHTML += '<option value="'+saveConfig.finallArrOffice[i].id+'">'
+
+    for (let i_officel = 0; i_officel < saveConfig.finallArrOffice.length; i_officel++) {
+        for (let i_day = 0; i_day < saveConfig.finallArrOffice[i_officel].days_parrys.length; i_day++) {
+            for (let i_couple = 0; i_couple < saveConfig.finallArrOffice[i_officel].days_parrys[i_day].length; i_couple++) {
+                if(saveConfig.finallArrOffice[i_officel].days_parrys[i_day][i_couple]){
+                    for (let i_cours = 0; i_cours < basicData.arrCourseGroups.length; i_cours++) {
+                        for (let i_group = 0; i_group < basicData.arrCourseGroups[i_cours].length; i_group++) {
+                            const newOption = document.createElement('option');
+                            newOption.value = saveConfig.finallArrOffice[i_officel].id;
+                            document.getElementById(`datalist_offices_day${i_day+1}_couple${i_couple+1}_groupID${basicData.arrCourseGroups[i_cours][i_group].id}`).appendChild(newOption)
+
+                        }
+                    }
                 }
             }
         }
     }
+    
 }
 
 
 function addSubject() {
-    for (let i = 0; i < basicData.arrSubject.length; i++) {
-        for (let ind = 1; ind < 7; ind++) {
-            for (let j = 1; j < 7; j++) {
-                document.getElementById("subjects_day"+ind+"_couple"+j).innerHTML += '<option value="'+basicData.arrSubject[i].name+'">' 
+    for (let i = 1; i < DAY_LENTH+1; i++) {
+        for (let j = 1; j < 7; j++) {
+            for (let ind = 0; ind < basicData.arrCourseGroups.length; ind++) {
+                for (let index = 0; index < basicData.arrCourseGroups[ind].length; index++) {
+                    const datalistElement = document.createElement('datalist');
+                    datalistElement.id = `datalist_subjects_day${i}_couple${j}_groupID${basicData.arrCourseGroups[ind][index].id}`
+                    document.getElementById(`datalist_subjects_day${i}_couple${j}`).appendChild(datalistElement)
+                }                
+            }
+            
+        }        
+    }
+
+    for (let i_Subject = 0; i_Subject < basicData.arrSubject.length; i_Subject++) {
+        for (let i_day = 0; i_day < 6; i_day++) {
+            for (let i_couple = 0; i_couple < 6; i_couple++) {
+                for (let i_cours = 0; i_cours < basicData.arrCourseGroups.length; i_cours++) {
+                    for (let i_group = 0; i_group < basicData.arrCourseGroups[i_cours].length; i_group++) {
+                        const newOption = document.createElement('option');
+                        newOption.value = basicData.arrSubject[i_Subject].name;
+                        document.getElementById(`datalist_subjects_day${i_day+1}_couple${i_couple+1}_groupID${basicData.arrCourseGroups[i_cours][i_group].id}`).appendChild(newOption)
+
+                    }
+                }
             }
         }
     }
@@ -405,17 +558,37 @@ function addProfessorSort() {
 }
 //TODO сокротить добавиь константы дней и времени
 function addProfessor() {
-    for (let ind = 1; ind < 7; ind++) {
+//     for (let ind = 1; ind < 7; ind++) {
+//         for (let j = 1; j < 7; j++) {
+//             document.getElementById("professors_day"+ind+"_couple"+j).innerHTML = ""            
+//         }
+//     }
+
+    for (let i = 1; i < DAY_LENTH+1; i++) {
         for (let j = 1; j < 7; j++) {
-            document.getElementById("professors_day"+ind+"_couple"+j).innerHTML = ""            
-        }
+            for (let ind = 0; ind < basicData.arrCourseGroups.length; ind++) {
+                for (let index = 0; index < basicData.arrCourseGroups[ind].length; index++) {
+                    const datalistElement = document.createElement('datalist');
+                    datalistElement.id = `datalist_professors_day${i}_couple${j}_groupID${basicData.arrCourseGroups[ind][index].id}`
+                    document.getElementById(`datalist_professors_day${i}_couple${j}`).appendChild(datalistElement)
+                }                
+            }
+            
+        }        
     }
 
-    for (let i = 0; i < saveConfig.finallArrProfessor.length; i++) {
-        for (let ind = 0; ind < saveConfig.finallArrProfessor[i].days_parrys.length; ind++) {
-            for (let j = 0; j < saveConfig.finallArrProfessor[i].days_parrys[ind].length; j++) {
-                if (saveConfig.finallArrProfessor[i].days_parrys[ind][j]) {
-                    document.getElementById("professors_day"+(ind+1)+"_couple"+(j+1)).innerHTML += '<option value="'+saveConfig.finallArrProfessor[i].name+'">'             
+    for (let i_Professor = 0; i_Professor < saveConfig.finallArrProfessor.length; i_Professor++) {
+        for (let i_day = 0; i_day < saveConfig.finallArrProfessor[i_Professor].days_parrys.length; i_day++) {
+            for (let i_couple = 0; i_couple < saveConfig.finallArrProfessor[i_Professor].days_parrys[i_day].length; i_couple++) {
+                if(saveConfig.finallArrProfessor[i_Professor].days_parrys[i_day][i_couple]){
+                    for (let i_cours = 0; i_cours < basicData.arrCourseGroups.length; i_cours++) {
+                        for (let i_group = 0; i_group < basicData.arrCourseGroups[i_cours].length; i_group++) {
+                            const newOption = document.createElement('option');
+                            newOption.value = saveConfig.finallArrProfessor[i_Professor].name;
+                            document.getElementById(`datalist_professors_day${i_day+1}_couple${i_couple+1}_groupID${basicData.arrCourseGroups[i_cours][i_group].id}`).appendChild(newOption)
+
+                        }
+                    }
                 }
             }
         }
@@ -513,7 +686,7 @@ function remove_data_items(){
     saveDataTable = null
     remove_data_html()
 }   
-function remove_data_html() {
+function remove_data_html() {   
     for (let i = 1; i <= 4; i++) {
         for (let j = 0; j < 6; j++) {
             document.getElementsByClassName("content_grups_course"+(i))[j].innerHTML = ""
@@ -764,6 +937,7 @@ function office_day_parry_swit(thisButt){
     index_parray = Array.from(document.getElementsByClassName("swit_office_day_"+index_day+"_parry_"+index_proffesor)).findIndex(button => button == thisButt)
     if(thisButt.value == "+"){
         thisButt.value = "-"
+        
         saveConfig.finallArrOffice[index_proffesor].days_parrys[index_day][index_parray] = true
     }
     else{
