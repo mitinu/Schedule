@@ -57,7 +57,6 @@ addOffice(1,3,6)
 addOffice(1,5,13)
 addOffice(2,3,13)
 
-
 server.get("/getData", function(req, res){ 
     res.send(data) 
 }) 
@@ -78,7 +77,23 @@ server.post("/postData",function(req, res){
     fse.writeFileSync("jsonDate/date"+req.body.date+".json", JSON.stringify(req.body, null, 4))
 
 })
-
+server.post("/postBilling", function(req, res){
+    const table = new JSDOM("<table>"+req.body.table+"</table>").window.document.querySelectorAll('table')[0]
+    data.arrSubject.length = 0;
+    data.arrProfessor.length = 0;
+    data.arrListHours.length = 0;
+    data.arrCourseGroups[0].length = 0;
+    data.arrCourseGroups[1].length = 0;
+    data.arrCourseGroups[2].length = 0;
+    data.arrCourseGroups[3].length = 0;
+    for (let i = 1; i < table.rows.length; i++) {
+        addSubject(table.rows[i])
+        addGrup(table.rows[i])
+        addProfessor(table.rows[i])
+        addListHours(table.rows[i])
+    }
+        res.send(data) 
+})
 
 server.get("/aaa", function(req, res){ 
     res.sendFile(__dirname + "/public/aaa.html") 
@@ -91,12 +106,6 @@ server.get("/aaa/aaa", function(req, res){
 
 
 
-
-function removeItemTable(table, index){
-    for (let i = 0; i < table.rows.length; i++) {
-        table.rows[i].deleteCell(index)
-    }
-}
 function addSubject(table_rows){
     let swit = true
     for (let j = 0; j < data.arrSubject.length; j++) {
@@ -110,20 +119,21 @@ function addSubject(table_rows){
     }
 }
 function returnIdCours(str){
-    if (new Date().getMonth()<7) {
+    const thisData = new Date()
+    if (thisData.getMonth()<7) {
         switch(parseInt(str.split(" ")[1][1])){
-            case new Date().getFullYear()-2024: return 3
-            case new Date().getFullYear()-2023: return 2
-            case new Date().getFullYear()-2022: return 1
-            case new Date().getFullYear()-2021: return 0
+            case thisData.getFullYear()-2024: return 3
+            case thisData.getFullYear()-2023: return 2
+            case thisData.getFullYear()-2022: return 1
+            case thisData.getFullYear()-2021: return 0
         }
     }
     else{
         switch(parseInt(str.split(" ")[1][1])){
-            case new Date().getFullYear()-2023: return 3
-            case new Date().getFullYear()-2022: return 2
-            case new Date().getFullYear()-2021: return 1
-            case new Date().getFullYear()-2020: return 0
+            case thisData.getFullYear()-2023: return 3
+            case thisData.getFullYear()-2022: return 2
+            case thisData.getFullYear()-2021: return 1
+            case thisData.getFullYear()-2020: return 0
         }
     }
 }
@@ -178,19 +188,3 @@ function getId(arr, name){
     }
     return -1
 }
-fse.readFile(__dirname+"/getData/Список.htm", 'utf8').then(function(data){
-    const table = new JSDOM("<table>"+new JSDOM(data).window.document.querySelectorAll('table')[0].querySelectorAll('tbody')[0].innerHTML+"</table>").window.document.querySelectorAll('table')[0]
-    removeItemTable(table, 11)
-    removeItemTable(table, 10)
-    removeItemTable(table, 8)
-    removeItemTable(table, 6)
-    removeItemTable(table, 5)
-    removeItemTable(table, 3)
-    removeItemTable(table, 2)
-    for (let i = 1; i < table.rows.length; i++) {
-        addSubject(table.rows[i])
-        addGrup(table.rows[i])
-        addProfessor(table.rows[i])
-        addListHours(table.rows[i])
-    }
-})

@@ -113,3 +113,39 @@ header *{
     display: flex;
     justify-content: space-between;
 }
+#sorting_ready{
+    border-top-right-radius: 10px;
+}
+#divMyAlertBlackout{
+    position: fixed;
+    z-index: 500;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(197, 196, 196, 0.493);
+    display: flex;
+    justify-content: center;
+}
+#divMyAlertContent{
+    position: relative; 
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    width: 44%;
+    height: 19%;
+    background-color: rgb(59, 59, 82);
+    margin-top: 20px;
+}
+#divMyAlertContent *{
+    margin-top: 10px;
+    height: 40px;
+}
+#divMyAlertContent .Close{
+    height: 30px;
+    width: 30px;
+    position: absolute;
+    top: 0;
+    right: 0;
+
+}

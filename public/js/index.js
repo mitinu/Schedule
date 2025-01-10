@@ -25,8 +25,59 @@ document.getElementById("save_config").addEventListener('click', function() {
         localStorage.setItem("date", JSON.stringify(date))
     }
 });
+document.getElementById("uploading_data").addEventListener('click', function() {
+   myAlert("выберети способ загрузки тарификации", "с сервера", "с файла(данные буду загружены на сервер)", uploading_data, loding_data)
+    
+    
+});
+function myAlert(h, val1, val2, func1, func2){
+
+    
+    const divMyAlertBlackout = document.createElement("div");
+    divMyAlertBlackout.id = "divMyAlertBlackout"
 
 
+    const divMyAlertContent = document.createElement("div");
+    divMyAlertContent.id = "divMyAlertContent"
+  
+
+
+    const spanH = document.createElement("span");
+    spanH.innerHTML = h
+    spanH.style.color = "white"
+
+    const inputButton1 = document.createElement("input");
+    inputButton1.type = "button"; 
+    const inputButton2 = inputButton1.cloneNode(); 
+    const inputButtonClose = inputButton1.cloneNode(); 
+
+    inputButton1.value = val1; 
+    inputButton2.value = val2; 
+    inputButtonClose.value = "X"; 
+    inputButtonClose.className = "Close"
+  
+    inputButton1.onclick = function() {
+        divMyAlertBlackout.remove()
+        func1()
+    }
+    inputButton2.onclick = function() {
+        divMyAlertBlackout.remove()
+        func2()
+    }
+    inputButtonClose.onclick = function() {
+        divMyAlertBlackout.remove()
+        
+    }
+    divMyAlertContent.appendChild(spanH)
+    divMyAlertContent.appendChild(inputButton1)
+    divMyAlertContent.appendChild(inputButton2)
+    divMyAlertContent.appendChild(inputButtonClose)
+    divMyAlertBlackout.appendChild(divMyAlertContent)
+    document.body.appendChild(divMyAlertBlackout)
+
+}
+let basicData = null
+let saveConfig = null
 
 function subject_sort(thisText){
     let swith = true
@@ -55,7 +106,6 @@ function subject_sort(thisText){
                                     }
                                 }
                                 if (swith2) {
-                                    console.log("Dawda2")
                                     arrName.push(arrProfessor[ind].name)
                                     const newOption = document.createElement('option');
                                     newOption.value = arrProfessor[ind].name;
@@ -92,10 +142,10 @@ function professors_sort(thisText){
             const arrListHours = basicData.arrListHours
             const arrName = []
             for (let j = 0; j < arrListHours.length; j++) {
-                if (arrListHours[j].idSubject==arrProfessor[i].id) {
+                if (arrListHours[j].idProfessor==arrProfessor[i].id) {
                     const arrSubject1 = basicData.arrSubject
                     for (let ind = 0; ind < arrSubject1.length; ind++) {
-                        if (arrSubject1[ind].id==arrListHours[j].idProfessor) {
+                        if (arrSubject1[ind].id==arrListHours[j].idSubject) {
                             if (arrName.length==0) {
                                 arrName.push(arrSubject1[ind].name)
                                 const newOption = document.createElement('option');
@@ -110,7 +160,6 @@ function professors_sort(thisText){
                                     }
                                 }
                                 if (swith2) {
-                                    console.log("Dawda2")
                                     arrName.push(arrSubject1[ind].name)
                                     const newOption = document.createElement('option');
                                     newOption.value = arrSubject1[ind].name;
@@ -642,31 +691,80 @@ function save_data(){
 
 }
 
-async function uploading_data(){
+
+
+
+function saving_data(data){
+    basicData = data
+    localStorage.setItem("basicData", JSON.stringify(basicData))
+
+    saveConfig={
+        "finallArrOffice":basicData.arrOffice.slice(),
+        "finallArrProfessor":basicData.arrProfessor.slice()
+    }
+    localStorage.setItem("saveConfig", JSON.stringify(saveConfig))
     
+    remove_config_items()
+    remove_data_items()
+    addGrup()
+    addSubject()
+}
+async function uploading_data(){
     if (confirm("Вы уверены, что хотите продолжить?")) {
         const urlGetData = new URL(location.origin+"/getData")
-        await fetch(urlGetData.href).then(function(res){return res.json()}).then(function(data){
-            basicData = data
-            localStorage.setItem("basicData", JSON.stringify(basicData))
-
-            saveConfig={
-                "finallArrOffice":basicData.arrOffice.slice(),
-                "finallArrProfessor":basicData.arrProfessor.slice()
-            }
-            localStorage.setItem("saveConfig", JSON.stringify(saveConfig))
-            
-            
-        })
-        remove_config_items()
-        remove_data_items()
-        addGrup()
+        await fetch(urlGetData.href).then(function(res){return res.json()}).then(saving_data)
+     
     } else {
         alert("Действие отменено.");
     }
     
 }
+function loding_data(){
+    const inputFile = document.createElement("input");
+    inputFile.type = "file"; 
+    inputFile.accept = ".htm" //, .html
+    inputFile.addEventListener('change', function(event) {
+        const file = event.target.files[0];
+        if (!file.name.endsWith('.htm')) {//!file.name.endsWith('.html') && 
+            alert('Пожалуйста, выберите файл с расширением.htm');// .html или 
+        }
+        else{
+            const reader = new FileReader(); 
+                
+            reader.onload = function(e) {
+                const content = e.target.result; 
+                const div = document.createElement('div')
+                div.innerHTML = content
+                const table = div.querySelectorAll('table')[0].querySelectorAll('tbody')[0]
+                removeItemTable(table, 11)
+                removeItemTable(table, 10)
+                removeItemTable(table, 8)
+                removeItemTable(table, 6)
+                removeItemTable(table, 5)
+                removeItemTable(table, 3)
+                removeItemTable(table, 2)
+                const urlPostBilling = new URL(location.origin+"/postBilling")
+                fetch(urlPostBilling.href, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({"table": table.innerHTML})
+                }).then(function(res){return res.json()}).then(saving_data)
 
+            };
+            reader.readAsText(file)
+            
+        }
+        // TODO полоучить таблицу ииииииииииии отправить ее на бек после чего запучтить функцию получение данных с бека с небольшой заденрзкой так как данные на беке должны еще обработатся как вырик просто ожидатьт пустое вохрощение с серверааааааааааааакаааа
+    })
+    inputFile.click()
+}
+function removeItemTable(table, index){
+    for (let i = 0; i < table.rows.length; i++) {
+        table.rows[i].deleteCell(index)
+    }
+}
 
 
 function remove_config_items() {
