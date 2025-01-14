@@ -1,4 +1,10 @@
 document.getElementById("sorting_ready").addEventListener('click', function() {
+    for (let ind = 1; ind < 7; ind++) {
+        for (let j = 1; j < 7; j++) {
+            document.getElementById("datalist_offices_day"+ind+"_couple"+j).innerHTML = ""      
+            document.getElementById("datalist_professors_day"+ind+"_couple"+j).innerHTML = ""            
+        }
+    }
     addOffice()
     addProfessor()
 });
@@ -193,7 +199,7 @@ async function getDate(){
     remove_data_html()
 
 
-    const urlGetDate = new URL(location.href + "getDate/"+document.getElementById("date").value)
+    const urlGetDate = new URL(location.origin + "/getDate/"+document.getElementById("date").value)
     try {
         await fetch(urlGetDate.href).then(function(res){return res.json()})
         .then(function(data){
@@ -298,7 +304,6 @@ function startIndex() {
         resetDate(date)
     }
 }
-
 
 function addGrup() {
     for (let index = 0; index < basicData.arrCourseGroups.length; index++) {
@@ -455,13 +460,6 @@ function addOfficeSort(){
 }    
 //TODO сокротить добавиь константы дней и времени
 function addOffice() {
-    // for (let ind = 1; ind < 7; ind++) {
-    //     for (let j = 1; j < 7; j++) {
-    //         document.getElementById("offices_day"+ind+"_couple"+j).innerHTML = ""            
-    
-
-    //     }
-    // }
     for (let i = 1; i < DAY_LENTH+1; i++) {
         for (let j = 1; j < 7; j++) {
             for (let ind = 0; ind < basicData.arrCourseGroups.length; ind++) {
@@ -720,6 +718,7 @@ async function uploading_data(){
     
 }
 function loding_data(){
+
     const inputFile = document.createElement("input");
     inputFile.type = "file"; 
     inputFile.accept = ".htm" //, .html
@@ -732,26 +731,30 @@ function loding_data(){
             const reader = new FileReader(); 
                 
             reader.onload = function(e) {
-                const content = e.target.result; 
-                const div = document.createElement('div')
-                div.innerHTML = content
-                const table = div.querySelectorAll('table')[0].querySelectorAll('tbody')[0]
-                removeItemTable(table, 11)
-                removeItemTable(table, 10)
-                removeItemTable(table, 8)
-                removeItemTable(table, 6)
-                removeItemTable(table, 5)
-                removeItemTable(table, 3)
-                removeItemTable(table, 2)
-                const urlPostBilling = new URL(location.origin+"/postBilling")
-                fetch(urlPostBilling.href, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({"table": table.innerHTML})
-                }).then(function(res){return res.json()}).then(saving_data)
+                if (confirm("Вы уверены, что хотите продолжить?")) {
+                    const content = e.target.result; 
+                    const div = document.createElement('div')
+                    div.innerHTML = content
+                    const table = div.querySelectorAll('table')[0].querySelectorAll('tbody')[0]
+                    removeItemTable(table, 11)
+                    removeItemTable(table, 10)
+                    removeItemTable(table, 8)
+                    removeItemTable(table, 6)
+                    removeItemTable(table, 5)
+                    removeItemTable(table, 3)
+                    removeItemTable(table, 2)
+                    const urlPostBilling = new URL(location.origin+"/postBilling")
+                    fetch(urlPostBilling.href, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({"table": table.innerHTML})
+                    }).then(function(res){return res.json()}).then(saving_data)
 
+                } else {
+                    alert("Действие отменено.");
+                }
             };
             reader.readAsText(file)
             
@@ -759,6 +762,10 @@ function loding_data(){
         // TODO полоучить таблицу ииииииииииии отправить ее на бек после чего запучтить функцию получение данных с бека с небольшой заденрзкой так как данные на беке должны еще обработатся как вырик просто ожидатьт пустое вохрощение с серверааааааааааааакаааа
     })
     inputFile.click()
+        
+     
+    
+    
 }
 function removeItemTable(table, index){
     for (let i = 0; i < table.rows.length; i++) {
@@ -813,7 +820,8 @@ function complete_data(){
         }
 
 
-        const urrPostData = new URL(location.href+"postData")
+        const urlPostData = new URL(location.origin+"/postData")
+        console.log(urlPostData)
         try {
             finallDate = date.split('-')
             if(finallDate[1].length == 1){
@@ -829,7 +837,7 @@ function complete_data(){
                 "arrCourseGroups": basicData.arrCourseGroups,
                 "arrProfessor": basicData.arrProfessor
             }
-            fetch(urrPostData.href, {
+            fetch(urlPostData.href, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
