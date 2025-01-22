@@ -15,7 +15,7 @@ const ListHours = require('./classes/ListHours.js')
 server.use(express.static(__dirname + "/public"))
 
 server.get("/helloWord1337PIZZE", function(req, res){ 
-    res.sendFile(__dirname + "/public/notIndex.html") 
+    res.sendFile(__dirname + "/public/making_schedule.html") 
 })
 server.get("/", function(req, res){ 
     res.sendFile(__dirname + "/public/index.html") 
