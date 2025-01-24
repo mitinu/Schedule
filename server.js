@@ -3,6 +3,21 @@ const express = require('express');
 const { type } = require('os');
 const server = express() 
 const http = require("http").createServer(server).listen(3000);
+const crypto = require('crypto');
+
+
+function generateRandomString(length) {
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let result = '';
+    
+    for (let i = 0; i < length; i++) {
+        const randomIndex = Math.floor(Math.random() * chars.length);
+        result += chars[randomIndex];
+    }
+    
+    return result;
+}
+const randomURL = "/"+generateRandomString(32)
 
 const { JSDOM } = require('jsdom');
 
@@ -10,11 +25,12 @@ const Groups = require('./classes/Groups.js')
 const Office = require('./classes/Office.js')
 const Subject = require('./classes/Subject.js')
 const Professor = require('./classes/Professor.js')
-const ListHours = require('./classes/ListHours.js')
+const ListHours = require('./classes/ListHours.js');
+const e = require('express');
 
 server.use(express.static(__dirname + "/public"))
 
-server.get("/helloWord1337PIZZE", function(req, res){ 
+server.get(randomURL, function(req, res){ 
     res.sendFile(__dirname + "/public/making_schedule.html") 
 })
 server.get("/", function(req, res){ 
@@ -73,9 +89,21 @@ server.get("/getDate/:id", function(req, res){
 
 
 server.use(express.json());
+server.post("/exit",(req,res)=>{
+    const hash = crypto.createHash('sha256');
+    console.log(req.body.password)
+    hash.update(req.body.password)
+    const result = hash.digest('hex')
+    console.log(result)
+    if (result=="4fc2a253be5e1ea5271b59aa74e9a39b77b1baa3be874b2d92e1111605e3ad24") {
+        res.send({"url": randomURL}) 
+    }
+    else{
+        res.status(401).json({"url": '/'})
+    }
+})
 server.post("/postData",function(req, res){
     fse.writeFileSync("jsonDate/date"+req.body.date+".json", JSON.stringify(req.body, null, 4))
-
 })
 server.post("/postBilling", function(req, res){
     const table = new JSDOM("<table>"+req.body.table+"</table>").window.document.querySelectorAll('table')[0]

@@ -32,11 +32,11 @@ document.getElementById("save_config").addEventListener('click', function() {
     }
 });
 document.getElementById("uploading_data").addEventListener('click', function() {
-   myAlert("выберети способ загрузки тарификации", "с сервера", "с файла(данные буду загружены на сервер)", uploading_data, loding_data)
+    myAlert2Button("выберети способ загрузки тарификации", "с сервера", "с файла(данные буду загружены на сервер)", uploading_data, loding_data)
     
     
 });
-function myAlert(h, val1, val2, func1, func2){
+function myAlert2Button(h, val1, val2, func1, func2){
 
     
     const divMyAlertBlackout = document.createElement("div");
@@ -204,7 +204,7 @@ async function getDate(){
         await fetch(urlGetDate.href).then(function(res){return res.json()})
         .then(function(data){
             for (let i_group = 0; i_group < data.arrCourseGroups.length; i_group++) {
-                for (let i = 0; i < DAY_LENTH; i++) {
+                for (let i = 0; i < 6; i++) {
                     document.getElementsByClassName("content_grups_course"+(i_group+1))[i].innerHTML = ""
                     htmlCode = `                
                         <table>
@@ -307,7 +307,7 @@ function startIndex() {
 
 function addGrup() {
     for (let index = 0; index < basicData.arrCourseGroups.length; index++) {
-        for (let i = 0; i < DAY_LENTH; i++) {
+        for (let i = 0; i < 6; i++) {
             for (let j = 0; j < basicData.arrCourseGroups[index].length; j++) {
                 htmlCode = `                
                     <table>
@@ -460,7 +460,7 @@ function addOfficeSort(){
 }    
 //TODO сокротить добавиь константы дней и времени
 function addOffice() {
-    for (let i = 1; i < DAY_LENTH+1; i++) {
+    for (let i = 1; i < 7; i++) {
         for (let j = 1; j < 7; j++) {
             for (let ind = 0; ind < basicData.arrCourseGroups.length; ind++) {
                 for (let index = 0; index < basicData.arrCourseGroups[ind].length; index++) {
@@ -494,7 +494,7 @@ function addOffice() {
 
 
 function addSubject() {
-    for (let i = 1; i < DAY_LENTH+1; i++) {
+    for (let i = 1; i < 7; i++) {
         for (let j = 1; j < 7; j++) {
             for (let ind = 0; ind < basicData.arrCourseGroups.length; ind++) {
                 for (let index = 0; index < basicData.arrCourseGroups[ind].length; index++) {
@@ -611,7 +611,7 @@ function addProfessor() {
 //         }
 //     }
 
-    for (let i = 1; i < DAY_LENTH+1; i++) {
+    for (let i = 1; i < 7; i++) {
         for (let j = 1; j < 7; j++) {
             for (let ind = 0; ind < basicData.arrCourseGroups.length; ind++) {
                 for (let index = 0; index < basicData.arrCourseGroups[ind].length; index++) {

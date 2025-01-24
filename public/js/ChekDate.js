@@ -33,7 +33,7 @@ async function getDate(){
         .then(function(data){
             if(document.getElementById("group").value==""){
                 for (let i_group = 0; i_group < data.arrCourseGroups.length; i_group++) {
-                    for (let i = 0; i < DAY_LENTH; i++) {
+                    for (let i = 0; i < 6; i++) {
                         document.getElementsByClassName("content_grups_course"+(i_group+1))[i].innerHTML = ""
                         htmlCode = `                
                             <table>
@@ -193,4 +193,63 @@ function startHtml(){
 function getOneGroup(myGroup) {
     localStorage.setItem("myGroup", myGroup.value)
     resetDate(document.getElementById("date"))
+}
+document.getElementById("exit").addEventListener('click', () => {
+    myAlert1Password1Button("Авторизация", "вход", exit)
+})
+function myAlert1Password1Button(h, val, func){
+
+    
+    const divMyAlertBlackout = document.createElement("div");
+    divMyAlertBlackout.id = "divMyAlertBlackout"
+
+
+    const divMyAlertContent = document.createElement("div");
+    divMyAlertContent.id = "divMyAlertContent"
+  
+
+
+    const spanH = document.createElement("span");
+    spanH.innerHTML = h
+    spanH.style.color = "white"
+
+    const inputPassword = document.createElement("input");
+    inputPassword.type = "password"; 
+    inputPassword.placeholder = "пароль"
+
+    const inputButton = document.createElement("input");
+    inputButton.type = "button"; 
+    const inputButtonClose = inputButton.cloneNode(); 
+
+    inputButton.value = val; 
+    inputButtonClose.value = "X"; 
+    inputButtonClose.className = "Close"
+  
+    inputButton.onclick = function() {
+        divMyAlertBlackout.remove()
+        func(inputPassword.value)
+    }
+    inputButtonClose.onclick = function() {
+        divMyAlertBlackout.remove()
+        
+    }
+    divMyAlertContent.appendChild(spanH)
+    divMyAlertContent.appendChild(inputButton)
+    divMyAlertContent.appendChild(inputPassword)
+    divMyAlertContent.appendChild(inputButtonClose)
+    divMyAlertBlackout.appendChild(divMyAlertContent)
+    document.body.appendChild(divMyAlertBlackout)
+
+}
+const urlExit = new URL(location.origin+"/exit")
+function exit(password) {
+    fetch(urlExit,{
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({"password": password})
+    })
+    .then((res)=>{return res.json()})
+    .then((res)=>{location=res.url})
 }

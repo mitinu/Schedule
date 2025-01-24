@@ -1,1 +1,0 @@
-const DAY_LENTH = 6

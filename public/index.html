@@ -7,10 +7,13 @@
     <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-    <datalist id="groups"></datalist>
-    <input type="date" id="date" onblur="resetDate(this)"><font color="white">выбирите пн</font>
-    <input list="groups" id="group" onchange="getOneGroup(this)">
-    <!-- <input type="button" value="назад" onclick="redirectionHome()"> -->
+    <header>
+        <datalist id="groups"></datalist>
+        <input type="date" id="date" onblur="resetDate(this)"><font color="white">выбирите пн</font>
+        <input list="groups" id="group" onchange="getOneGroup(this)">
+        <input type="button" id="exit" value="вход администратора">
+    </header>
+        <!-- <input type="button" value="назад" onclick="redirectionHome()"> -->
     <div class="course">
         <input type="button" value="-" class="roll" onclick="rollFunc(this)"> 1 курсы
 
@@ -826,7 +829,6 @@
             </div>
         </div>
     </div>
-    <script src="/js/CONST.js"></script>
     <script src="/js/ChekDate.js"></script>
     
 </body>
