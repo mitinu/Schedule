@@ -26,7 +26,6 @@ const Office = require('./classes/Office.js')
 const Subject = require('./classes/Subject.js')
 const Professor = require('./classes/Professor.js')
 const ListHours = require('./classes/ListHours.js');
-const e = require('express');
 
 server.use(express.static(__dirname + "/public"))
 
