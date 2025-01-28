@@ -306,60 +306,62 @@ function startIndex() {
 }
 
 function addGrup() {
+    console.log(2)
     for (let index = 0; index < basicData.arrCourseGroups.length; index++) {
         for (let i = 0; i < 6; i++) {
             for (let j = 0; j < basicData.arrCourseGroups[index].length; j++) {
-                htmlCode = `                
-                    <table>
-                        <tr>
-                            <td colspan="2" class="name_groups_course${(index+1)}_day${i}"></td>
-                        </tr>
-                        <tr>
-                            <td><input list="datalist_subjects_day${(i+1)}_couple1_groupID${basicData.arrCourseGroups[index][j].id}" class="subjects subjects_day${(i+1)}_couple1" onblur="subject_sort(this)"></td>
-                            <td rowspan="2"><input list="datalist_offices_day${(i+1)}_couple1_groupID${basicData.arrCourseGroups[index][j].id}" class="offices offices_day${(i+1)}_couple1" oninput="checkRepetitions(this)"></td>
-                        </tr>
-                        <tr>
-                            <td><input list="datalist_professors_day${(i+1)}_couple1_groupID${basicData.arrCourseGroups[index][j].id}" class="professors professors_day${(i+1)}_couple1" oninput="checkRepetitions(this)" onblur="professors_sort(this)"></td>
-                        </tr>
-                        <tr>
-                            <td><input list="datalist_subjects_day${(i+1)}_couple2_groupID${basicData.arrCourseGroups[index][j].id}" class="subjects subjects_day${(i+1)}_couple2" onblur="subject_sort(this)"></td>
-                            <td rowspan="2"><input list="datalist_offices_day${(i+1)}_couple2_groupID${basicData.arrCourseGroups[index][j].id}" class="offices offices_day${(i+1)}_couple2" oninput="checkRepetitions(this)"></td>
-                        </tr>
-                        <tr>
-                            <td><input list="datalist_professors_day${(i+1)}_couple2_groupID${basicData.arrCourseGroups[index][j].id}" class="professors professors_day${(i+1)}_couple2" oninput="checkRepetitions(this)" onblur="professors_sort(this)"></td>
-                        </tr>
-                        <tr>
-                            <td><input list="datalist_subjects_day${(i+1)}_couple3_groupID${basicData.arrCourseGroups[index][j].id}" class="subjects subjects_day${(i+1)}_couple3" onblur="subject_sort(this)"></td>
-                            <td rowspan="2"><input list="datalist_offices_day${(i+1)}_couple3_groupID${basicData.arrCourseGroups[index][j].id}" class="offices offices_day${(i+1)}_couple3" oninput="checkRepetitions(this)"></td>
-                        </tr>
-                        <tr>
-                            <td><input list="datalist_professors_day${(i+1)}_couple3_groupID${basicData.arrCourseGroups[index][j].id}" class="professors professors_day${(i+1)}_couple3" oninput="checkRepetitions(this)" onblur="professors_sort(this)"></td>
-                        </tr>
-                        <tr>
-                            <td><input list="datalist_subjects_day${(i+1)}_couple4_groupID${basicData.arrCourseGroups[index][j].id}" class="subjects subjects_day${(i+1)}_couple4" onblur="subject_sort(this)"></td>
-                            <td rowspan="2"><input list="datalist_offices_day${(i+1)}_couple4_groupID${basicData.arrCourseGroups[index][j].id}" class="offices offices_day${(i+1)}_couple4" oninput="checkRepetitions(this)"></td>
-                        </tr>
-                        <tr>
-                            <td><input list="datalist_professors_day${(i+1)}_couple4_groupID${basicData.arrCourseGroups[index][j].id}" class="professors professors_day${(i+1)}_couple4" oninput="checkRepetitions(this)" onblur="professors_sort(this)"></td>
-                        </tr>
-                        <tr>
-                            <td><input list="datalist_subjects_day${(i+1)}_couple5_groupID${basicData.arrCourseGroups[index][j].id}" class="subjects subjects_day${(i+1)}_couple5" onblur="subject_sort(this)"></td>
-                            <td rowspan="2"><input list="datalist_offices_day${(i+1)}_couple5_groupID${basicData.arrCourseGroups[index][j].id}" class="offices offices_day${(i+1)}_couple5" oninput="checkRepetitions(this)"></td>
-                        </tr>
-                        <tr>
-                            <td><input list="datalist_professors_day${(i+1)}_couple5_groupID${basicData.arrCourseGroups[index][j].id}" class="professors professors_day${(i+1)}_couple5" oninput="checkRepetitions(this)" onblur="professors_sort(this)"></td>
-                        </tr>
-                        <tr>
-                            <td><input list="datalist_subjects_day${(i+1)}_couple6_groupID${basicData.arrCourseGroups[index][j].id}" class="subjects subjects_day${(i+1)}_couple6" onblur="subject_sort(this)"></td>
-                            <td rowspan="2"><input list="datalist_offices_day${(i+1)}_couple6_groupID${basicData.arrCourseGroups[index][j].id}" class="offices offices_day${(i+1)}_couple6" oninput="checkRepetitions(this)"></td>
-                        </tr>
-                        <tr>
-                            <td><input list="datalist_professors_day${(i+1)}_couple6_groupID${basicData.arrCourseGroups[index][j].id}" class="professors professors_day${(i+1)}_couple6" oninput="checkRepetitions(this)" onblur="professors_sort(this)"></td>
-                        </tr>
-                    </table>
-                `
-                document.getElementsByClassName("content_grups_course"+(index+1))[i].innerHTML += htmlCode
-                document.getElementsByClassName("name_groups_course"+(index+1)+"_day"+i)[j].innerHTML = basicData.arrCourseGroups[index][j].name
+                const elementTable = document.createElement("table")
+                    const elementTrNameGroups = document.createElement("tr")
+                        const elementTdNameGroups = document.createElement("td")
+                        elementTdNameGroups.colSpan = 2
+                        elementTdNameGroups.className = `name_groups_course${(index+1)}_day${i}`
+                        elementTdNameGroups.innerHTML = basicData.arrCourseGroups[index][j].name
+                    elementTrNameGroups.appendChild(elementTdNameGroups)
+                elementTable.appendChild(elementTrNameGroups)
+                for (let ind = 0; ind < 6; ind++) {
+                    const elementTr1 = document.createElement("tr")
+                        const elementTd11 = document.createElement("td")
+                            const elementInput11 = document.createElement("input")
+                            elementInput11.setAttribute("list", `datalist_subjects_day${(i+1)}_couple${ind+1}_groupID${basicData.arrCourseGroups[index][j].id}`)
+                            elementInput11.className = `subjects subjects_day${i + 1}_couple${ind + 1}`
+                            elementInput11.onblur = () => {
+                                subject_sort(elementInput11)
+                            }
+                        elementTd11.appendChild(elementInput11)
+                        const elementTd12 = document.createElement("td")
+                        elementTd12.rowSpan = 2
+                            const elementInput12 = document.createElement("input")
+                            elementInput12.setAttribute("list", `datalist_offices_day${(i+1)}_couple${ind+1}_groupID${basicData.arrCourseGroups[index][j].id}`)
+                            elementInput12.className = `offices offices_day${(i+1)}_couple${ind+1}`
+                            elementInput12.oninput = () => {
+                                checkRepetitions(elementInput12)
+                            }
+                        elementTd12.appendChild(elementInput12)
+                    elementTr1.appendChild(elementTd11)
+                    elementTr1.appendChild(elementTd12)
+                    const elementTr2 = document.createElement("tr")
+                        const elementTd21 = document.createElement("td")
+                            const elementInput21 = document.createElement("input")
+                            elementInput21.setAttribute("list", `datalist_professors_day${(i+1)}_couple${ind+1}_groupID${basicData.arrCourseGroups[index][j].id}`)
+                            elementInput21.className = `professors professors_day${(i+1)}_couple${ind+1}`
+                            elementInput21.onblur = () => {
+                                professors_sort(elementInput21)
+                            }
+                            elementInput21.oninput = () => {
+                                checkRepetitions(elementInput21)
+                            }
+                        elementTd21.appendChild(elementInput21)
+                    elementTr2.appendChild(elementTd21)
+                    
+
+
+                    elementTable.appendChild(elementTr1)
+                    elementTable.appendChild(elementTr2)
+                   
+
+                }
+               
+                document.getElementsByClassName("content_grups_course"+(index+1))[i].appendChild(elementTable)
             } 
         }
     }
@@ -458,7 +460,6 @@ function addOfficeSort(){
     addOffice()
     
 }    
-//TODO сокротить добавиь константы дней и времени
 function addOffice() {
     for (let i = 1; i < 7; i++) {
         for (let j = 1; j < 7; j++) {
@@ -603,13 +604,7 @@ function addProfessorSort() {
     }
     addProfessor()
 }
-//TODO сокротить добавиь константы дней и времени
 function addProfessor() {
-//     for (let ind = 1; ind < 7; ind++) {
-//         for (let j = 1; j < 7; j++) {
-//             document.getElementById("professors_day"+ind+"_couple"+j).innerHTML = ""            
-//         }
-//     }
 
     for (let i = 1; i < 7; i++) {
         for (let j = 1; j < 7; j++) {
