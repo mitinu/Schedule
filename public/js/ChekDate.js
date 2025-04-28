@@ -183,12 +183,16 @@ async function getDate(){
 startHtml()
 function startHtml(){
     document.getElementById("group").value = localStorage.getItem("myGroup")
-    arrCourseGroups = JSON.parse(localStorage.getItem("basicData")).arrCourseGroups
-    for (let i = 0; i < arrCourseGroups.length; i++) {
-        for (let j = 0; j < arrCourseGroups[i].length; j++) {
-            document.getElementById("groups").innerHTML += "<option value='"+arrCourseGroups[i][j].name+"'>"
-        }
-    }
+    const urlGetNameGruop = new URL(location.origin + "/getNameGroup")
+    fetch(urlGetNameGruop.href)
+    .then(res=>{return res.json()})
+    .then(data=>{
+        console.log(data)
+        data.forEach(name => {
+
+            document.getElementById("groups").innerHTML += "<option value='"+name+"'>"
+        })
+    })    
 }
 function getOneGroup(myGroup) {
     localStorage.setItem("myGroup", myGroup.value)

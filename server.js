@@ -2,7 +2,7 @@ const fse = require('fs-extra')
 const express = require('express');
 const { type } = require('os');
 const server = express() 
-const http = require("http").createServer(server).listen(3000);
+
 const crypto = require('crypto');
 
 
@@ -26,6 +26,7 @@ const Office = require('./classes/Office.js')
 const Subject = require('./classes/Subject.js')
 const Professor = require('./classes/Professor.js')
 const ListHours = require('./classes/ListHours.js');
+const { group } = require('console');
 
 server.use(express.static(__dirname + "/public"))
 
@@ -88,13 +89,20 @@ server.get("/getDate/:id", function(req, res){
 
 
 server.use(express.json());
+
+const password = function(){
+    const hash = crypto.createHash('sha256');
+    hash.update("password")
+    return hash.digest('hex')
+}()
+
 server.post("/exit",(req,res)=>{
     const hash = crypto.createHash('sha256');
     console.log(req.body.password)
     hash.update(req.body.password)
     const result = hash.digest('hex')
     console.log(result)
-    if (result=="4fc2a253be5e1ea5271b59aa74e9a39b77b1baa3be874b2d92e1111605e3ad24") {
+    if (result==password) {
         res.send({"url": randomURL}) 
     }
     else{
@@ -121,6 +129,17 @@ server.post("/postBilling", function(req, res){
     }
         res.send(data) 
 })
+
+server.get("/getNameGroup", (req, res)=>{
+    const result = []
+    data["arrCourseGroups"].forEach(groups => {
+        groups.forEach(group=>{
+            result.push(group.name)
+        })  
+    })
+    res.send(result)
+})
+
 
 server.get("/aaa", function(req, res){ 
     res.sendFile(__dirname + "/public/aaa.html") 
@@ -215,3 +234,7 @@ function getId(arr, name){
     }
     return -1
 }
+
+
+const PORT = 3000
+server.listen(PORT, console.log(`http://localhost:${PORT}`));

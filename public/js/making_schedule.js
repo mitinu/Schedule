@@ -149,26 +149,26 @@ function professors_sort(thisText){
             const arrName = []
             for (let j = 0; j < arrListHours.length; j++) {
                 if (arrListHours[j].idProfessor==arrProfessor[i].id) {
-                    const arrSubject1 = basicData.arrSubject
-                    for (let ind = 0; ind < arrSubject1.length; ind++) {
-                        if (arrSubject1[ind].id==arrListHours[j].idSubject) {
+                    const arrSubject = basicData.arrSubject
+                    for (let ind = 0; ind < arrSubject.length; ind++) {
+                        if (arrSubject[ind].id==arrListHours[j].idSubject) {
                             if (arrName.length==0) {
-                                arrName.push(arrSubject1[ind].name)
+                                arrName.push(arrSubject[ind].name)
                                 const newOption = document.createElement('option');
-                                newOption.value = arrSubject1[ind].name;
+                                newOption.value = arrSubject[ind].name;
                                 document.getElementById("datalist_subjects_"+thisText.list.id.split("_").splice(2, 3).join('_')).appendChild(newOption)
                             }
                             else{
                                 let swith2 = true
                                 for (let index = 0; index < arrName.length; index++) {
-                                    if (arrName[index]==arrSubject1[ind].name) {
+                                    if (arrName[index]==arrSubject[ind].name) {
                                         swith2 = false
                                     }
                                 }
                                 if (swith2) {
-                                    arrName.push(arrSubject1[ind].name)
+                                    arrName.push(arrSubject[ind].name)
                                     const newOption = document.createElement('option');
-                                    newOption.value = arrSubject1[ind].name;
+                                    newOption.value = arrSubject[ind].name;
                                     document.getElementById("datalist_subjects_"+thisText.list.id.split("_").splice(2, 3).join('_')).appendChild(newOption)
                                 }
                             }
@@ -209,7 +209,7 @@ async function getDate(){
                     htmlCode = `                
                         <table>
                             <tr>
-                                <td colspan="2" class="name_groups_course${(i_group+1)}_day${i}"></td>
+                                <td colspan="2" class="name_groups name_groups_course${(i_group+1)}_day${i}"></td>
                             </tr>
                             <tr>
                                 <td><input list="subjects_day${(i+1)}_couple1" class="subjects subjects_day${(i+1)}_couple1" oninput="checkRepetitions(this)"></td>
@@ -314,7 +314,7 @@ function addGrup() {
                     const elementTrNameGroups = document.createElement("tr")
                         const elementTdNameGroups = document.createElement("td")
                         elementTdNameGroups.colSpan = 2
-                        elementTdNameGroups.className = `name_groups_course${(index+1)}_day${i}`
+                        elementTdNameGroups.className = `name_groups name_groups_course${(index+1)}_day${i}`
                         elementTdNameGroups.innerHTML = basicData.arrCourseGroups[index][j].name
                     elementTrNameGroups.appendChild(elementTdNameGroups)
                 elementTable.appendChild(elementTrNameGroups)
@@ -705,7 +705,9 @@ function saving_data(data){
 async function uploading_data(){
     if (confirm("Вы уверены, что хотите продолжить?")) {
         const urlGetData = new URL(location.origin+"/getData")
-        await fetch(urlGetData.href).then(function(res){return res.json()}).then(saving_data)
+        await fetch(urlGetData.href)
+        .then(function(res){return res.json()})
+        .then(saving_data)
      
     } else {
         alert("Действие отменено.");
@@ -806,17 +808,34 @@ function complete_data(){
 
 
         data2 = []
-        for (let i = 0; i < document.getElementsByClassName("professors").length; i++) {
+
+        let j = 0
+        for (let i = 0; i < document.getElementsByClassName("professors").length; j += ++i%6==0? 1 : 0) {
             data2.push({
+                weekday: function(day){
+                    switch(day){
+                        case 0:
+                            return "пн"
+                        case 1:
+                            return "вт"
+                        case 2:
+                            return "ср"
+                        case 3:
+                            return "чт"
+                        case 4:
+                            return "пн"
+                        case 5:
+                            return "сб"
+                    }
+                }(i%6),
+                group: document.getElementsByClassName("name_groups")[j].innerHTML,
                 professors: document.getElementsByClassName("professors")[i].value,
                 subjects: document.getElementsByClassName("subjects")[i].value,
                 offices: document.getElementsByClassName("offices")[i].value
             })
+            
         }
-
-
         const urlPostData = new URL(location.origin+"/postData")
-        console.log(urlPostData)
         try {
             finallDate = date.split('-')
             if(finallDate[1].length == 1){
@@ -851,6 +870,8 @@ function complete_data(){
         alert("Действие отменено.");
     }  
 }
+
+
 function loadXLSX() {
     let index_group = 0
     let data = [[], [], [], []];
@@ -866,27 +887,23 @@ function loadXLSX() {
                 rowData.push("")
             }
             data[i_curs].push(rowData)
-            let day = ""
+            let day = function(i_day){
                 switch(i_day){
                     case 1:
-                        day = "пн"
-                        break
+                        return "пн"
                     case 2:
-                        day = "вт"
-                        break
+                        return  "вт"
                     case 3:
-                        day = "ср"
-                        break
+                        return "ср"
                     case 4:
-                        day = "чт"
-                        break
+                        return "чт"
                     case 5:
-                        day = "пт"
-                        break
+                        return "пт"
                     case 6:
-                        day = "сб"
-                        break
+                        return "сб"
                 }
+            }(i_day)
+                
             dateCourse = new Date(date)
             
             let dateText = dateCourse.getDate()+"."+(dateCourse.getMonth()+1)+"."+dateCourse.getFullYear()
@@ -948,7 +965,7 @@ function loadXLSX() {
             }
             else{
                 if (swit) {
-                    for (let j = 2; j < data[ind][0].length*2; j+=2) {
+                    for (let j = 2; j < data[ind][0].length; j+=2) {
                         worksheet['!merges'].push({ s: { r: i, c: j }, e: { r: (i+1), c: j } })
                         swit = false
                     }
